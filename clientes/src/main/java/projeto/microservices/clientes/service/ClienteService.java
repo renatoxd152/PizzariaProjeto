@@ -18,8 +18,6 @@ public class ClienteService {
     private final ClienteRepository clienteRepository;
 
     public Cliente adicionarCliente(Cliente cliente) {
-        System.out.println("CPF RECEBIDO:" + cliente.getCpf());
-        System.out.println("CPF EXISTE:" + clienteRepository.existsByCpf(cliente.getCpf()));
         if (clienteRepository.existsByCpf(cliente.getCpf()))
         {
             throw new ClienteException("Esse CPF já está cadastrado!");
