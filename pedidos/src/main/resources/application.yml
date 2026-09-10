@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: pedidos
+  config:
+    import: optional:file:.env[.properties]
+  mongodb:
+    host: localhost
+    port: 27019
+    database: ${MONGO_DATABASE}
+    username: ${MONGO_USERNAME}
+    password: ${MONGO_PASSWORD}
+    authentication-database: admin
+server:
+  port: 8082
+
+
+clients:
+  clientes:
+    url: 'http://localhost:8080/clientes'
+  pizzas:
+    url: 'http://localhost:8081/pizzas'
+

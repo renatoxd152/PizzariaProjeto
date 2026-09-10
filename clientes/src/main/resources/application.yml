@@ -1,0 +1,4 @@
+spring.application.name=clientes
+spring.config.import=optional:file:.env[.properties]
+spring.mongodb.uri=mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@localhost:27018/${MONGO_DATABASE}?authSource=admin
+server.port=8080
