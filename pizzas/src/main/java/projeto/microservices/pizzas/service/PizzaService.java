@@ -38,4 +38,12 @@ public class PizzaService {
         pizzaEncontrada.setItens(pizza.getItens());
         return pizzaRepository.save(pizzaEncontrada);
     }
+
+    public Pizza listarPizza(String id) {
+        return pizzaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Esse id não foi encontrado!"));
+    }
+
+    public List<Pizza> buscarPorIds(List<String> ids) {
+        return pizzaRepository.findAllById(ids);
+    }
 }

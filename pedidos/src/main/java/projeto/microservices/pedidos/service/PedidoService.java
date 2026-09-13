@@ -46,4 +46,8 @@ public class PedidoService {
         }
         return total;
     }
+
+    public List<Pedido> listarPedidos() {
+        return pedidoRepository.findAll();
+    }
 }

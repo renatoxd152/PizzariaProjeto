@@ -1,3 +1,14 @@
-spring.application.name=pizzas
-spring.config.import=optional:file:.env[.properties]
-spring.mongodb.uri=mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@localhost:27019/${MONGO_DATABASE}?authSource=admin
+spring:
+  application:
+    name: pizzas
+  config:
+    import: optional:file:.env[.properties]
+  mongodb:
+    host: localhost
+    port: 27020
+    database: ${MONGO_DATABASE}
+    username: ${MONGO_USERNAME}
+    password: ${MONGO_PASSWORD}
+    authentication-database: admin
+server:
+  port: 8081

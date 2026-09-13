@@ -4,7 +4,7 @@ services:
     container_name: mongodb-pizzas
     restart: unless-stopped
     ports:
-      - "27019:27017"
+      - "27020:27017"
     volumes:
       - mongodb-pizzas:/data/db
     environment:

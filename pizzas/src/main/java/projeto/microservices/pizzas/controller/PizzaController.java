@@ -31,6 +31,19 @@ public class PizzaController {
         List<Pizza> pizzas = pizzaService.listarPizzas();
         return ResponseEntity.ok(pizzas);
     }
+    @GetMapping("{id}")
+    public ResponseEntity<Pizza> listarPizza(@PathVariable("id") String id)
+    {
+        Pizza pizza = pizzaService.listarPizza(id);
+        return ResponseEntity.ok(pizza);
+    }
+
+    @GetMapping("/filtrar/{ids}")
+    public ResponseEntity<List<Pizza>> filtrarPizzas(@PathVariable("ids") List<String> ids)
+    {
+        return ResponseEntity.ok(pizzaService.buscarPorIds(ids));
+    }
+
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deletarPizza(@PathVariable("id") String id)
     {
