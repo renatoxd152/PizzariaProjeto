@@ -1,5 +1,6 @@
 package projeto.microservices.clientes.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class ClienteController {
     private final ClienteMapper clienteMapper;
     private final ClienteService clienteService;
     @PostMapping
-    public ResponseEntity<Cliente> adicionarCliente(@RequestBody ClienteDTO clienteDTO)
+    public ResponseEntity<Cliente> adicionarCliente(@Valid @RequestBody ClienteDTO clienteDTO)
     {
         Cliente cliente = clienteService.adicionarCliente(clienteMapper.map(clienteDTO));
         return ResponseEntity.ok(cliente);
