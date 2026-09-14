@@ -10,6 +10,7 @@ import projeto.microservices.pedidos.client.representation.PizzaRepresentation;
 import projeto.microservices.pedidos.controller.dto.PedidoDTO;
 import projeto.microservices.pedidos.model.Pedido;
 import projeto.microservices.pedidos.model.enums.StatusPedido;
+import projeto.microservices.pedidos.publisher.PedidoPublisher;
 import projeto.microservices.pedidos.repository.PedidoRepository;
 
 import java.math.BigDecimal;
@@ -21,12 +22,16 @@ public class PedidoService {
     private final ClienteClient clienteClient;
     private final PizzaClient pizzaClient;
     private final PedidoRepository pedidoRepository;
+    private final PedidoPublisher pedidoPublisher;
 
     public Pedido adicionarPedido(PedidoDTO pedidoDTO) {
         ResponseEntity<ClienteRepresentation> clienteRepresentation = clienteClient.obterDadosDoCliente(pedidoDTO.clienteCPF());
         ResponseEntity<List<PizzaRepresentation>> pizzaRepresentation = pizzaClient.obterDadosDaPizza(pedidoDTO.pizzasIds());
         Pedido pedido = criarPedido(clienteRepresentation, pizzaRepresentation);
-        return pedidoRepository.save(pedido);
+        Pedido pedidoSalvo = pedidoRepository.save(pedido);
+        pedidoPublisher.publicar(pedidoSalvo);
+
+        return pedidoSalvo;
     }
 
     private static Pedido criarPedido(ResponseEntity<ClienteRepresentation> clienteRepresentation, ResponseEntity<List<PizzaRepresentation>> pizzaRepresentation) {

@@ -10,6 +10,12 @@ spring:
     username: ${MONGO_USERNAME}
     password: ${MONGO_PASSWORD}
     authentication-database: admin
+  kafka:
+    bootstrap-servers: 'localhost:9092'
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
 server:
   port: 8082
 
@@ -19,4 +25,9 @@ clients:
     url: 'http://localhost:8080/clientes'
   pizzas:
     url: 'http://localhost:8081/pizzas'
+  config:
+    kafka:
+      server-url: 'http://localhost:9092'
+      topics:
+        pedidos: 'pedidos-realizados'
 
