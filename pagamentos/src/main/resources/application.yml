@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: pagamentos
+  config:
+    import: optional:file:.env[.properties]
+  mongodb:
+    host: localhost
+    port: 27021
+    database: ${MONGO_DATABASE}
+    username: ${MONGO_USERNAME}
+    password: ${MONGO_PASSWORD}
+    authentication-database: admin
+
+  kafka:
+    consumer:
+      group-id: pagamentos
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+server:
+  port: 8083
