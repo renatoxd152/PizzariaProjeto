@@ -10,6 +10,8 @@ import projeto.microservices.pagamentos.model.enums.StatusPedido;
 import projeto.microservices.pagamentos.repository.PagamentoRepository;
 import projeto.microservices.pagamentos.subscriber.representation.PedidoRepresentation;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -38,7 +40,6 @@ public class PagamentoService {
         }
 
         if (pagamento.getTotal().compareTo(pedidoRepresentation.total()) != 0) {
-
             pagamentoCriado.setStatusPedido(StatusPedido.ERRO_PAGAMENTO);
 
             return pagamentoRepository.save(pagamentoCriado);
@@ -56,5 +57,9 @@ public class PagamentoService {
         pagamento.setStatusPedido(pedidoCriado.statusPedido());
         pagamento.setTotal(pedidoCriado.total());
         pagamentoRepository.save(pagamento);
+    }
+
+    public List<Pagamento> listarPagamentos() {
+        return pagamentoRepository.findAll();
     }
 }
