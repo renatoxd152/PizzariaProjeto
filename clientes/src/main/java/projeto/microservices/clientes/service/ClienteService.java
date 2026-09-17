@@ -32,7 +32,8 @@ public class ClienteService {
 
     public Cliente listarClientePorId(String id)
     {
-        return clienteRepository.findById(id).orElse(null);
+        return clienteRepository.findById(id).
+                orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Esse cliente não foi encontrado!"));
     }
 
     public Cliente listarClientePorCPF(String cpf) {
