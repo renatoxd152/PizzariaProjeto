@@ -113,8 +113,21 @@ public class ClienteServiceTest {
 
             assertEquals(cliente,resultado);
         }
-    }
 
+        @Test
+        @DisplayName("Deve gerar uma mensagem de erro com o status de não encontrado")
+        public void deveGerarMensagemComNotFound()
+        {
+            when(clienteRepository.findByCpf("46412315212")).thenReturn(Optional.empty());
+
+            ResponseStatusException exception = assertThrows(
+                    ResponseStatusException.class,
+                    () -> clienteService.listarClientePorCPF("46412315212")
+            );
+
+            assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+        }
+    }
 
     @Nested
     public class AtualizarClientes

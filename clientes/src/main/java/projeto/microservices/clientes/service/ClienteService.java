@@ -37,7 +37,7 @@ public class ClienteService {
     }
 
     public Cliente listarClientePorCPF(String cpf) {
-        return clienteRepository.findByCpf(cpf).orElse(null);
+        return clienteRepository.findByCpf(cpf).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Esse cliente não foi encontrado!"));
     }
 
     public void deletarCliente(String cpf)
