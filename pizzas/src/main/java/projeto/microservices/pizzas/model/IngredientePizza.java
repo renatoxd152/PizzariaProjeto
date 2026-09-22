@@ -10,8 +10,8 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@Document(collection = "ingredientes")
 public class IngredientePizza {
+    private String id;
     private String nomeIngrediente;
     private BigDecimal quantidade;
     private UnidadeMedida unidadeMedida;

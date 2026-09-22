@@ -18,8 +18,10 @@ import projeto.microservices.pizzas.repository.PizzaRepository;
 
 import javax.swing.text.html.Option;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -35,6 +37,7 @@ public class PizzaServiceTest {
     private PizzaService pizzaService;
     private Pizza pizza;
     private Pizza pizzaAtualizada;
+    private IngredientePizza ingredientePizza4;
     @BeforeEach
     void setup()
     {
@@ -42,21 +45,23 @@ public class PizzaServiceTest {
         IngredientePizza ingredientePizza1 = new IngredientePizza();
         IngredientePizza ingredientePizza2 = new IngredientePizza();
         IngredientePizza ingredientePizza3 = new IngredientePizza();
-        IngredientePizza ingredientePizza4 = new IngredientePizza();
+        ingredientePizza4 = new IngredientePizza();
 
         pizza.setId("idpizza");
         pizza.setNome("Frango com Catupiry");
         pizza.setTamanho(TamanhoPizza.GIGANTE);
         pizza.setPreco(BigDecimal.valueOf(49.9));
 
+        ingredientePizza1.setId(UUID.randomUUID().toString());
         ingredientePizza1.setNomeIngrediente("Mussarela");
         ingredientePizza1.setQuantidade(BigDecimal.valueOf(250));
         ingredientePizza1.setUnidadeMedida(UnidadeMedida.GRAMA);
 
+        ingredientePizza2.setId(UUID.randomUUID().toString());
         ingredientePizza2.setNomeIngrediente("Frango");
         ingredientePizza2.setQuantidade(BigDecimal.valueOf(1000));
         ingredientePizza2.setUnidadeMedida(UnidadeMedida.GRAMA);
-        pizza.setItens(List.of(ingredientePizza1,ingredientePizza2));
+        pizza.setItens(new ArrayList<>(List.of(ingredientePizza1,ingredientePizza2)));
 
         pizzaAtualizada = new Pizza();
         pizzaAtualizada.setId("idpizza");
@@ -169,8 +174,49 @@ public class PizzaServiceTest {
         public void deveDeletarUmaPizza()
         {
             when(pizzaRepository.findById("idpizza")).thenReturn(Optional.of(pizza));
-
+            pizzaService.deletarPizza(pizza.getId());
             verify(pizzaRepository).deleteById("idpizza");
+        }
+    }
+
+    @Nested
+    public class DeletarIngredienteDePizza
+    {
+        @Test
+        @DisplayName("Deve deletar um ingrediente de pizza")
+        public void deveDeletarUmIngredienteDePizza()
+        {
+            when(pizzaRepository.findById("idpizza")).thenReturn(Optional.of(pizza));
+
+            when(pizzaRepository.save(pizza)).thenReturn(pizza);
+
+            Pizza pizzaAtualizada = pizzaService.deletarItemPizza(pizza.getId(), pizza.getItens().get(1).getId());
+
+            assertEquals(1, pizzaAtualizada.getItens().size());
+
+            assertEquals("Mussarela", pizzaAtualizada.getItens().get(0).getNomeIngrediente());
+        }
+        @Test
+        @DisplayName("Deve atualizar um item de pizza")
+        public void deveAtualizarItemDaPizza()
+        {
+            when(pizzaRepository.findById("idpizza")).thenReturn(Optional.of(pizza));
+
+            when(pizzaRepository.save(pizza)).thenReturn(pizza);
+
+            Pizza pizzaAtualizada = pizzaService.atualizarItemPizza(pizza.getId(),pizza.getItens().get(1).getId(), ingredientePizza4);
+
+            assertEquals(ingredientePizza4.getNomeIngrediente() , pizzaAtualizada.getItens().get(1).getNomeIngrediente());
+
+            assertEquals(
+                    ingredientePizza4.getQuantidade(),
+                    pizzaAtualizada.getItens().get(1).getQuantidade()
+            );
+
+            assertEquals(
+                    ingredientePizza4.getUnidadeMedida(),
+                    pizzaAtualizada.getItens().get(1).getUnidadeMedida()
+            );
         }
 
     }
