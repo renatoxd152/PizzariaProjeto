@@ -9,12 +9,19 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
+import projeto.microservices.clientes.client.PedidoClient;
+import projeto.microservices.clientes.client.enums.StatusPedido;
+import projeto.microservices.clientes.client.representation.PedidoRepresentation;
+import projeto.microservices.clientes.client.representation.PizzaRepresentation;
 import projeto.microservices.clientes.exception.ClienteException;
 import projeto.microservices.clientes.model.Cliente;
 import projeto.microservices.clientes.repository.ClienteRepository;
 
 import javax.swing.text.html.Option;
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,6 +41,15 @@ public class ClienteServiceTest {
 
     private Cliente cliente;
 
+    @Mock
+    private PedidoClient pedidoClient;
+
+    @Mock
+    private PizzaRepresentation pizzaRepresentation;
+
+    @Mock
+    private List<PedidoRepresentation> pedidoRepresentation;
+
     @BeforeEach
     void setup()
     {
@@ -44,6 +60,13 @@ public class ClienteServiceTest {
         cliente.setTelefone("17113123123");
         cliente.setEmail("teste@gmail.com");
         cliente.setNome("Cliente");
+
+        pizzaRepresentation = new PizzaRepresentation("Frango com Catupiry", BigDecimal.valueOf(49.9),"id");
+
+        pedidoRepresentation = List.of(new PedidoRepresentation("idPedido",
+                StatusPedido.PENDENTE,
+                BigDecimal.valueOf(49.9),
+                List.of(pizzaRepresentation)));
     }
 
     @Nested
@@ -213,7 +236,11 @@ public class ClienteServiceTest {
         @DisplayName("Deve listar todos os pedidos de um cliente")
         public void deveListarTodosPedidosDeUmCliente()
         {
+            when(pedidoClient.obterPedidosPorIdCliente(cliente.getId())).thenReturn(pedidoRepresentation);
 
+            List<PedidoRepresentation> resultados = clienteService.listarPedidosClientePorId(cliente.getId());
+
+            assertEquals(pedidoRepresentation, resultados);
         }
 
     }

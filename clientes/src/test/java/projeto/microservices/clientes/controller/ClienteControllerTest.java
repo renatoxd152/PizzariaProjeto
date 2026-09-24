@@ -14,12 +14,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import projeto.microservices.clientes.client.PedidoClient;
+import projeto.microservices.clientes.client.enums.StatusPedido;
+import projeto.microservices.clientes.client.representation.PedidoRepresentation;
+import projeto.microservices.clientes.client.representation.PizzaRepresentation;
 import projeto.microservices.clientes.controller.dto.ClienteDTO;
 import projeto.microservices.clientes.controller.mapper.ClienteMapper;
 import projeto.microservices.clientes.model.Cliente;
 import projeto.microservices.clientes.service.ClienteService;
 import tools.jackson.databind.ObjectMapper;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -45,6 +50,13 @@ public class ClienteControllerTest {
 
     private Cliente cliente;
 
+    @Mock
+    private PizzaRepresentation pizzaRepresentation;
+    @Mock
+    private PedidoRepresentation pedidoRepresentation;
+    @Mock
+    private List<PedidoRepresentation> listaPedidos;
+
     @BeforeEach
     void setup()
     {
@@ -54,6 +66,15 @@ public class ClienteControllerTest {
         cliente.setCpf("46413164212");
         cliente.setEmail("renato@gmail.com");
         cliente.setId("id");
+
+        pizzaRepresentation = new PizzaRepresentation("Frango com Catupiry", BigDecimal.valueOf(49.9),"id");
+
+        pedidoRepresentation = new PedidoRepresentation("idPedido",
+                StatusPedido.PENDENTE,
+                BigDecimal.valueOf(49.9),
+                List.of(pizzaRepresentation));
+
+        this.listaPedidos = List.of(pedidoRepresentation);
     }
 
     @Nested
@@ -143,6 +164,28 @@ public class ClienteControllerTest {
 
             verify(clienteService).listarClientePorCPF(cliente.getCpf());
 
+        }
+
+        @Test
+        @DisplayName("Deve listar os pedidos de determinado pelo Id do Cliente")
+        public void deveListarPedidosPeloIdDoCliente() throws Exception
+        {
+            when(clienteService.listarPedidosClientePorId(cliente.getId())).thenReturn(listaPedidos);
+
+            mockMvc.perform(MockMvcRequestBuilders.
+                            get("/clientes/{id}/pedidos", cliente.getId())
+                    ).andExpect(status().isOk())
+                    .andExpect(jsonPath("$").isArray())
+                    .andExpect(jsonPath("$.length()").value(1))
+                    .andExpect(jsonPath("$[0].id").value(pedidoRepresentation.id()))
+                    .andExpect(jsonPath("$[0].statusPedido").value(pedidoRepresentation.statusPedido().toString()))
+                    .andExpect(jsonPath("$[0].total").value(pedidoRepresentation.total()))
+                    .andExpect(jsonPath("$[0].pizzas.length()").value(1))
+                    .andExpect(jsonPath("$[0].pizzas[0].nome").value(pizzaRepresentation.nome()))
+                    .andExpect(jsonPath("$[0].pizzas[0].preco").value(pizzaRepresentation.preco()))
+                    .andExpect(jsonPath("$[0].pizzas[0].id").value(pizzaRepresentation.id()));
+
+            verify(clienteService).listarPedidosClientePorId(cliente.getId());
         }
     }
 

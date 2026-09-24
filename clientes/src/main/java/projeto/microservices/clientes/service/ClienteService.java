@@ -2,8 +2,11 @@ package projeto.microservices.clientes.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import projeto.microservices.clientes.client.PedidoClient;
+import projeto.microservices.clientes.client.representation.PedidoRepresentation;
 import projeto.microservices.clientes.controller.dto.ClienteDTO;
 import projeto.microservices.clientes.exception.ClienteException;
 import projeto.microservices.clientes.model.Cliente;
@@ -16,7 +19,7 @@ import java.util.List;
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
-
+    private final PedidoClient pedidoClient;
     public Cliente adicionarCliente(Cliente cliente) {
         if (clienteRepository.existsByCpf(cliente.getCpf()))
         {
@@ -55,5 +58,9 @@ public class ClienteService {
         clienteEncontrado.setNome(cliente.getNome());
         clienteEncontrado.setTelefone(cliente.getTelefone());
         return clienteRepository.save(clienteEncontrado);
+    }
+
+    public List<PedidoRepresentation> listarPedidosClientePorId(String id) {
+        return pedidoClient.obterPedidosPorIdCliente(id);
     }
 }

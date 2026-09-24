@@ -12,3 +12,8 @@ spring:
     authentication-database: admin
 server:
   port: 8080
+
+clients:
+  cliente:
+    pedidos:
+      url: 'http://localhost:8082/pedidos'

@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import projeto.microservices.clientes.client.representation.PedidoRepresentation;
 import projeto.microservices.clientes.controller.dto.ClienteDTO;
 import projeto.microservices.clientes.controller.mapper.ClienteMapper;
 import projeto.microservices.clientes.exception.ClienteException;
@@ -54,6 +55,12 @@ public class ClienteController {
     public ResponseEntity<Cliente> atualizarCliente(@PathVariable("cpf") String cpf, @RequestBody ClienteDTO clienteDTO)
     {
         return ResponseEntity.ok(clienteService.atualizarCliente(cpf, clienteMapper.map(clienteDTO)));
+    }
+
+    @GetMapping("/{id}/pedidos")
+    public ResponseEntity<List<PedidoRepresentation>> listarPedidosPorIdCliente(@PathVariable String id)
+    {
+        return ResponseEntity.ok(clienteService.listarPedidosClientePorId(id));
     }
 
 }
