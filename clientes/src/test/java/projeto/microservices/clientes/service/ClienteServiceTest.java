@@ -205,4 +205,17 @@ public class ClienteServiceTest {
             verify(clienteRepository).deleteById("idCliente");
         }
     }
+
+    @Nested
+    public class ListarPedidos
+    {
+        @Test
+        @DisplayName("Deve listar todos os pedidos de um cliente")
+        public void deveListarTodosPedidosDeUmCliente()
+        {
+
+        }
+
+    }
+
 }

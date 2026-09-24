@@ -52,7 +52,7 @@ public class PedidoServiceTest {
     private PizzaRepresentation pizzaRepresentation;
 
     private Pedido pedido;
-
+    private  List<Pedido> pedidos;
     @BeforeEach
     void setup()
     {
@@ -67,6 +67,7 @@ public class PedidoServiceTest {
         pedido.setStatusPedido(StatusPedido.PENDENTE);
         pedido.setTotal(BigDecimal.valueOf(49.9));
         pedido.setPizzas(List.of(pizzaRepresentation));
+        pedidos = List.of(pedido);
     }
 
     @Nested
@@ -99,11 +100,24 @@ public class PedidoServiceTest {
         @DisplayName("Deve listar todos os pedidos")
         public void deveListarPedidos()
         {
-            List<Pedido> pedidos = List.of(pedido);
             when(pedidoRepository.findAll()).thenReturn(pedidos);
             List<Pedido> resultado = pedidoService.listarPedidos();
             assertEquals(pedidos, resultado);
         }
+
+        @Test
+        @DisplayName("Deve listar todos os pedidos pelo Id do Cliente")
+        public void deveListarPedidosPeloCPF()
+        {
+
+            String idCliente = clienteRepresentation.id();
+            when(pedidoRepository.findByIdCliente(idCliente)).thenReturn(pedidos);
+
+            List<Pedido> resultado = pedidoService.listarPedidosPorIdCliente(idCliente);
+
+            assertEquals(pedidos, resultado);
+        }
+
 
     }
 

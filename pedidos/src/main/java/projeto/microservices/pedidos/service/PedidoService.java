@@ -55,4 +55,8 @@ public class PedidoService {
     public List<Pedido> listarPedidos() {
         return pedidoRepository.findAll();
     }
+
+    public List<Pedido> listarPedidosPorIdCliente(String idCliente) {
+        return pedidoRepository.findByIdCliente(idCliente);
+    }
 }
