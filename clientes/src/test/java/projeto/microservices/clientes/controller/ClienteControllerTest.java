@@ -11,6 +11,7 @@ import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -32,6 +33,7 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -49,7 +51,7 @@ public class ClienteControllerTest {
     private ObjectMapper objectMapper;
 
     private Cliente cliente;
-
+    private ClienteDTO clienteDTO;
     @Mock
     private PizzaRepresentation pizzaRepresentation;
     @Mock
@@ -60,12 +62,15 @@ public class ClienteControllerTest {
     @BeforeEach
     void setup()
     {
+        clienteDTO = new ClienteDTO("Renato","161616131","46413164212","renato@gmail.com","123456");
+
         cliente = new Cliente();
         cliente.setNome("Renato");
         cliente.setTelefone("161616131");
         cliente.setCpf("46413164212");
         cliente.setEmail("renato@gmail.com");
         cliente.setId("id");
+        cliente.setSenha("123456");
 
         pizzaRepresentation = new PizzaRepresentation("Frango com Catupiry", BigDecimal.valueOf(49.9),"id");
 
@@ -99,9 +104,11 @@ public class ClienteControllerTest {
             mockMvc.perform(
                             post("/clientes")
                                     .contentType(MediaType.APPLICATION_JSON)
-                                    .content(objectMapper.writeValueAsString(cliente ))
+                                    .content(objectMapper.writeValueAsString(clienteDTO))
                     )
-                    .andExpect(status().isOk());
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.senha").doesNotExist())
+            ;
         }
 
 
@@ -126,7 +133,8 @@ public class ClienteControllerTest {
                     .andExpect(jsonPath("$[0].nome").value(cliente.getNome()))
                     .andExpect(jsonPath("$[0].email").value(cliente.getEmail()))
                     .andExpect(jsonPath("$[0].cpf").value(cliente.getCpf()))
-                    .andExpect(jsonPath("$[0].telefone").value(cliente.getTelefone()));
+                    .andExpect(jsonPath("$[0].telefone").value(cliente.getTelefone()))
+                    .andExpect(jsonPath("$[0].senha").doesNotExist());
 
             verify(clienteService).listarClientes();
         }
@@ -142,7 +150,8 @@ public class ClienteControllerTest {
                     .andExpect(jsonPath("$.nome").value(cliente.getNome()))
                     .andExpect(jsonPath("$.email").value(cliente.getEmail()))
                     .andExpect(jsonPath("$.cpf").value(cliente.getCpf()))
-                    .andExpect(jsonPath("$.telefone").value(cliente.getTelefone()));
+                    .andExpect(jsonPath("$.telefone").value(cliente.getTelefone()))
+                    .andExpect(jsonPath("$[0].senha").doesNotExist());
 
             verify(clienteService).listarClientePorId(cliente.getId());
 
@@ -160,7 +169,8 @@ public class ClienteControllerTest {
                     .andExpect(jsonPath("$.nome").value(cliente.getNome()))
                     .andExpect(jsonPath("$.email").value(cliente.getEmail()))
                     .andExpect(jsonPath("$.cpf").value(cliente.getCpf()))
-                    .andExpect(jsonPath("$.telefone").value(cliente.getTelefone()));
+                    .andExpect(jsonPath("$.telefone").value(cliente.getTelefone()))
+                    .andExpect(jsonPath("$[0].senha").doesNotExist());
 
             verify(clienteService).listarClientePorCPF(cliente.getCpf());
 
@@ -204,7 +214,6 @@ public class ClienteControllerTest {
 
             verify(clienteService).deletarCliente(cliente.getCpf());
         }
-
     }
 
     @Nested
@@ -232,14 +241,10 @@ public class ClienteControllerTest {
                     .andExpect(jsonPath("$.nome").value(clienteAtualizado.getNome()))
                     .andExpect(jsonPath("$.email").value(clienteAtualizado.getEmail()))
                     .andExpect(jsonPath("$.cpf").value(clienteAtualizado.getCpf()))
-                    .andExpect(jsonPath("$.telefone").value(clienteAtualizado.getTelefone()));
+                    .andExpect(jsonPath("$.telefone").value(clienteAtualizado.getTelefone()))
+                    .andExpect(jsonPath("$[0].senha").doesNotExist());
 
             verify(clienteService).atualizarCliente(cliente.getCpf(), clienteAtualizado);
         }
-
     }
-
-
-
-
 }

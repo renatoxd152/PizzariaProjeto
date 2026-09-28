@@ -1,4 +1,5 @@
 package projeto.microservices.clientes.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -19,4 +20,6 @@ public class Cliente implements Serializable {
     private String telefone;
     private String cpf;
     private String email;
+    @JsonIgnore
+    private String senha;
 }

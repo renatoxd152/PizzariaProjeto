@@ -12,5 +12,8 @@ public record ClienteDTO (
         String cpf,
         @NotBlank(message = "Email não pode ser vazio!")
         @Email(message = "Email inválido!")
-        String email) {
+        String email,
+        @NotBlank(message = "A senha deve ter no mínimo 8 caracteres")
+        String senha
+) {
 }

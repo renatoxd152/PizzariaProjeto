@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
 import projeto.microservices.clientes.client.PedidoClient;
 import projeto.microservices.clientes.client.enums.StatusPedido;
@@ -50,6 +51,9 @@ public class ClienteServiceTest {
     @Mock
     private List<PedidoRepresentation> pedidoRepresentation;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     @BeforeEach
     void setup()
     {
@@ -60,6 +64,7 @@ public class ClienteServiceTest {
         cliente.setTelefone("17113123123");
         cliente.setEmail("teste@gmail.com");
         cliente.setNome("Cliente");
+        cliente.setSenha(passwordEncoder.encode("123456"));
 
         pizzaRepresentation = new PizzaRepresentation("Frango com Catupiry", BigDecimal.valueOf(49.9),"id");
 
@@ -91,6 +96,8 @@ public class ClienteServiceTest {
         public void deveCadastrarCliente()
         {
             when(clienteRepository.existsByCpf(cliente.getCpf())).thenReturn(false);
+            when(passwordEncoder.encode(cliente.getSenha())).thenReturn("123456");
+
             when(clienteRepository.save(cliente)).thenReturn(cliente);
             Cliente resultado = clienteService.adicionarCliente(cliente);
             assertEquals(cliente,resultado);

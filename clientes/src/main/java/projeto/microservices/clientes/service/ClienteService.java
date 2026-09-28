@@ -3,6 +3,7 @@ package projeto.microservices.clientes.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import projeto.microservices.clientes.client.PedidoClient;
@@ -20,11 +21,13 @@ public class ClienteService {
 
     private final ClienteRepository clienteRepository;
     private final PedidoClient pedidoClient;
+    private final PasswordEncoder passwordEncoder;
     public Cliente adicionarCliente(Cliente cliente) {
         if (clienteRepository.existsByCpf(cliente.getCpf()))
         {
             throw new ClienteException("Esse CPF já está cadastrado!");
         }
+        cliente.setSenha(passwordEncoder.encode(cliente.getSenha()));
         return clienteRepository.save(cliente);
     }
 
