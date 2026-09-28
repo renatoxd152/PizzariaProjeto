@@ -3,12 +3,17 @@ package projeto.microservices.clientes.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import projeto.microservices.clientes.client.PedidoClient;
 import projeto.microservices.clientes.client.representation.PedidoRepresentation;
 import projeto.microservices.clientes.controller.dto.ClienteDTO;
+import projeto.microservices.clientes.controller.dto.ClienteLoginDTO;
 import projeto.microservices.clientes.exception.ClienteException;
 import projeto.microservices.clientes.model.Cliente;
 import projeto.microservices.clientes.repository.ClienteRepository;
@@ -22,6 +27,8 @@ public class ClienteService {
     private final ClienteRepository clienteRepository;
     private final PedidoClient pedidoClient;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+
     public Cliente adicionarCliente(Cliente cliente) {
         if (clienteRepository.existsByCpf(cliente.getCpf()))
         {
@@ -65,5 +72,12 @@ public class ClienteService {
 
     public List<PedidoRepresentation> listarPedidosClientePorId(String id) {
         return pedidoClient.obterPedidosPorIdCliente(id);
+    }
+
+    public Cliente login (ClienteLoginDTO clienteLoginDTO)
+    {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(clienteLoginDTO.cpf(),clienteLoginDTO.senha()));
+
+        return clienteRepository.findByCpf(clienteLoginDTO.cpf()).orElseThrow();
     }
 }

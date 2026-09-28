@@ -2,14 +2,18 @@ package projeto.microservices.clientes.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import projeto.microservices.clientes.client.representation.PedidoRepresentation;
 import projeto.microservices.clientes.controller.dto.ClienteDTO;
+import projeto.microservices.clientes.controller.dto.ClienteLoginDTO;
 import projeto.microservices.clientes.controller.mapper.ClienteMapper;
-import projeto.microservices.clientes.exception.ClienteException;
 import projeto.microservices.clientes.model.Cliente;
+import projeto.microservices.clientes.model.LoginResponse;
 import projeto.microservices.clientes.service.ClienteService;
+import projeto.microservices.clientes.service.JWTService;
 
 import java.util.List;
 
@@ -20,6 +24,7 @@ public class ClienteController {
 
     private final ClienteMapper clienteMapper;
     private final ClienteService clienteService;
+    private final JWTService jwtService;
     @PostMapping
     public ResponseEntity<Cliente> adicionarCliente(@Valid @RequestBody ClienteDTO clienteDTO)
     {
@@ -62,5 +67,16 @@ public class ClienteController {
     {
         return ResponseEntity.ok(clienteService.listarPedidosClientePorId(id));
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody ClienteLoginDTO clienteLoginDTO)
+    {
+        Cliente cliente = clienteService.login(clienteLoginDTO);
+        String token = jwtService.generateToken(cliente);
+        LoginResponse loginResponse = new LoginResponse(token,jwtService.getExpirationTime());
+
+        return ResponseEntity.ok(loginResponse);
+    }
+
 
 }

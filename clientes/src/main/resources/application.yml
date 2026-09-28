@@ -17,3 +17,8 @@ clients:
   cliente:
     pedidos:
       url: 'http://localhost:8082/pedidos'
+
+security:
+  jwt:
+    secret-key: ${JWT_SECRET}
+    expiration-ms: 3600000
