@@ -17,7 +17,7 @@ import java.util.List;
 @Setter
 @RequiredArgsConstructor
 @Document(collection = "clientes")
-public class Cliente implements UserDetails {
+public class Cliente implements Serializable,UserDetails {
     private static final long serialVersionUID = 1L;
     @Id
     private String id;
