@@ -31,3 +31,6 @@ clients:
       topics:
         pedidos: 'pedidos-realizados'
 
+security:
+  jwt:
+    secret-key: ${JWT_SECRET}
