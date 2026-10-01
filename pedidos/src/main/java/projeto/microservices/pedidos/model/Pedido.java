@@ -1,9 +1,6 @@
 package projeto.microservices.pedidos.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import projeto.microservices.pedidos.client.representation.ClienteRepresentation;
@@ -15,6 +12,7 @@ import java.util.List;
 
 @Document("pedidos")
 @RequiredArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class Pedido {

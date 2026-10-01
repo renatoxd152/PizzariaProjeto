@@ -1,5 +1,4 @@
 package projeto.microservices.pedidos.service;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -18,7 +17,6 @@ import projeto.microservices.pedidos.model.Pedido;
 import projeto.microservices.pedidos.model.enums.StatusPedido;
 import projeto.microservices.pedidos.publisher.PedidoPublisher;
 import projeto.microservices.pedidos.repository.PedidoRepository;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
