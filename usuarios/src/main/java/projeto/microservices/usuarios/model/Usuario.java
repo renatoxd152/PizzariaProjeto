@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import projeto.microservices.usuarios.model.enums.UsuarioRole;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -27,7 +28,7 @@ public class Usuario implements Serializable,UserDetails {
     private String email;
     @JsonIgnore
     private String senha;
-
+    private UsuarioRole usuarioRole;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();

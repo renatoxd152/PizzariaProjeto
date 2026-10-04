@@ -19,6 +19,7 @@ import projeto.microservices.usuarios.client.representation.PizzaRepresentation;
 import projeto.microservices.usuarios.controller.dto.UsuarioDTO;
 import projeto.microservices.usuarios.controller.mapper.UsuarioMapper;
 import projeto.microservices.usuarios.model.Usuario;
+import projeto.microservices.usuarios.model.enums.UsuarioRole;
 import projeto.microservices.usuarios.service.JWTService;
 import projeto.microservices.usuarios.service.UsuarioService;
 import tools.jackson.databind.ObjectMapper;
@@ -60,7 +61,7 @@ public class UsuarioControllerTest {
     @BeforeEach
     void setup()
     {
-        usuarioDTO = new UsuarioDTO("Renato","161616131","46413164212","renato@gmail.com","123456");
+        usuarioDTO = new UsuarioDTO("Renato","161616131","46413164212","renato@gmail.com","123456", UsuarioRole.CLIENTE);
 
         usuario = new Usuario();
         usuario.setNome("Renato");
@@ -69,7 +70,7 @@ public class UsuarioControllerTest {
         usuario.setEmail("renato@gmail.com");
         usuario.setId("id");
         usuario.setSenha("123456");
-
+        usuario.setUsuarioRole(UsuarioRole.CLIENTE);
         pizzaRepresentation = new PizzaRepresentation("Frango com Catupiry", BigDecimal.valueOf(49.9),"id");
 
         pedidoRepresentation = new PedidoRepresentation("idPedido",
@@ -132,7 +133,8 @@ public class UsuarioControllerTest {
                     .andExpect(jsonPath("$[0].email").value(usuario.getEmail()))
                     .andExpect(jsonPath("$[0].cpf").value(usuario.getCpf()))
                     .andExpect(jsonPath("$[0].telefone").value(usuario.getTelefone()))
-                    .andExpect(jsonPath("$[0].senha").doesNotExist());
+                    .andExpect(jsonPath("$[0].senha").doesNotExist())
+                    .andExpect(jsonPath("$[0].usuarioRole").value(usuario.getUsuarioRole().toString()));
 
             verify(usuarioService).listarUsuarios();
         }
@@ -149,7 +151,8 @@ public class UsuarioControllerTest {
                     .andExpect(jsonPath("$.email").value(usuario.getEmail()))
                     .andExpect(jsonPath("$.cpf").value(usuario.getCpf()))
                     .andExpect(jsonPath("$.telefone").value(usuario.getTelefone()))
-                    .andExpect(jsonPath("$[0].senha").doesNotExist());
+                    .andExpect(jsonPath("$.senha").doesNotExist())
+                    .andExpect(jsonPath("$.usuarioRole").value(usuario.getUsuarioRole().toString()));
 
             verify(usuarioService).listarUsuarioPorId(usuario.getId());
 
@@ -168,7 +171,8 @@ public class UsuarioControllerTest {
                     .andExpect(jsonPath("$.email").value(usuario.getEmail()))
                     .andExpect(jsonPath("$.cpf").value(usuario.getCpf()))
                     .andExpect(jsonPath("$.telefone").value(usuario.getTelefone()))
-                    .andExpect(jsonPath("$[0].senha").doesNotExist());
+                    .andExpect(jsonPath("$.senha").doesNotExist())
+                    .andExpect(jsonPath("$.usuarioRole").value(usuario.getUsuarioRole().toString()));
 
             verify(usuarioService).listarUsuarioPorCPF(usuario.getCpf());
 
@@ -227,6 +231,7 @@ public class UsuarioControllerTest {
             usuarioAtualizado.setCpf("3123123231");
             usuarioAtualizado.setEmail("teste@gmail.com");
             usuarioAtualizado.setId("id");
+            usuarioAtualizado.setUsuarioRole(UsuarioRole.CLIENTE);
 
 
             when(usuarioMapper.map(any(UsuarioDTO.class)))
@@ -240,7 +245,8 @@ public class UsuarioControllerTest {
                     .andExpect(jsonPath("$.email").value(usuarioAtualizado.getEmail()))
                     .andExpect(jsonPath("$.cpf").value(usuarioAtualizado.getCpf()))
                     .andExpect(jsonPath("$.telefone").value(usuarioAtualizado.getTelefone()))
-                    .andExpect(jsonPath("$[0].senha").doesNotExist());
+                    .andExpect(jsonPath("$.senha").doesNotExist())
+                    .andExpect(jsonPath("$.usuarioRole").value(usuario.getUsuarioRole().toString()));
 
             verify(usuarioService).atualizarUsuario(usuario.getCpf(), usuarioAtualizado);
         }

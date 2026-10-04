@@ -2,6 +2,8 @@ package projeto.microservices.usuarios.controller.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import projeto.microservices.usuarios.model.enums.UsuarioRole;
 
 public record UsuarioDTO(
         @NotBlank(message = "Nome não pode ser vazio!")
@@ -14,6 +16,8 @@ public record UsuarioDTO(
         @Email(message = "Email inválido!")
         String email,
         @NotBlank(message = "A senha deve ter no mínimo 8 caracteres")
-        String senha
+        String senha,
+        @NotNull(message = "É necessário colocar o nível do usuário")
+        UsuarioRole usuarioRole
 ) {
 }
