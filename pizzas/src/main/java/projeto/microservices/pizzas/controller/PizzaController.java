@@ -2,6 +2,9 @@ package projeto.microservices.pizzas.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import projeto.microservices.pizzas.controller.dto.PizzaDTO;
 import projeto.microservices.pizzas.controller.mapper.PizzaMapper;
@@ -18,6 +21,8 @@ public class PizzaController {
     private final PizzaService pizzaService;
 
     private final PizzaMapper pizzaMapper;
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Pizza> criarPizza(@RequestBody PizzaDTO pizzaDTO)
     {

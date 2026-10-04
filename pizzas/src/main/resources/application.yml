@@ -12,3 +12,7 @@ spring:
     authentication-database: admin
 server:
   port: 8081
+
+security:
+  jwt:
+    secret-key: ${JWT_SECRET}

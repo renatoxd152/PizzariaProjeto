@@ -7,6 +7,7 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import projeto.microservices.usuarios.model.enums.UsuarioRole;
 
@@ -29,9 +30,10 @@ public class Usuario implements Serializable,UserDetails {
     @JsonIgnore
     private String senha;
     private UsuarioRole usuarioRole;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return List.of(new SimpleGrantedAuthority("ROLE_" + usuarioRole.name()));
     }
 
     @JsonIgnore
