@@ -22,7 +22,6 @@ public class PizzaController {
 
     private final PizzaMapper pizzaMapper;
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Pizza> criarPizza(@RequestBody PizzaDTO pizzaDTO)
     {
