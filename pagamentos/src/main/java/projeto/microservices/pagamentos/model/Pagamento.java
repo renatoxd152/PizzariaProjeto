@@ -1,5 +1,6 @@
 package projeto.microservices.pagamentos.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -18,4 +19,5 @@ public class Pagamento implements Serializable {
     private String idPedido;
     private StatusPedido statusPedido;
     private BigDecimal total;
+    private String cpf;
 }

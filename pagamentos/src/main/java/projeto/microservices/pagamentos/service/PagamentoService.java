@@ -59,7 +59,8 @@ public class PagamentoService {
         pagamentoRepository.save(pagamento);
     }
 
-    public List<Pagamento> listarPagamentos() {
-        return pagamentoRepository.findAll();
+    public List<Pagamento> listarPagamentos(String cpf) {
+        List<Pagamento> pagamentos = pagamentoRepository.findByCPFCliente(cpf);
+        return pagamentos;
     }
 }

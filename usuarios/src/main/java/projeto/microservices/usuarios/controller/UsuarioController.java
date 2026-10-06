@@ -47,6 +47,12 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.listarUsuarioPorCPF(cpf));
     }
 
+    @GetMapping("/{id}/pedidos")
+    public ResponseEntity<List<PedidoRepresentation>> listarPedidosPorIdUsuario(@PathVariable String id)
+    {
+        return ResponseEntity.ok(usuarioService.listarPedidosUsuarioPorId(id));
+    }
+
     @DeleteMapping("{cpf}")
     public ResponseEntity<Void> deletarUsuario(@PathVariable("cpf") String cpf)
     {
@@ -58,12 +64,6 @@ public class UsuarioController {
     public ResponseEntity<Usuario> atualizarUsuario(@PathVariable("cpf") String cpf, @RequestBody UsuarioDTO usuarioDTO)
     {
         return ResponseEntity.ok(usuarioService.atualizarUsuario(cpf, usuarioMapper.map(usuarioDTO)));
-    }
-
-    @GetMapping("/{id}/pedidos")
-    public ResponseEntity<List<PedidoRepresentation>> listarPedidosPorIdUsuario(@PathVariable String id)
-    {
-        return ResponseEntity.ok(usuarioService.listarPedidosUsuarioPorId(id));
     }
 
     @PostMapping("/login")

@@ -1,5 +1,6 @@
 package projeto.microservices.pagamentos.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,26 @@ public class PagamentoServiceTest {
     private PagamentoRepository pagamentoRepository;
     @InjectMocks
     private PagamentoService pagamentoService;
+    private Pagamento p1;
+    private Pagamento p2;
+    @BeforeEach
+    void setup()
+    {
+        p1 = new Pagamento();
+        p1.setId("6aa9beaba430d802b5b88376");
+        p1.setIdPedido("idpedido1");
+        p1.setTotal(BigDecimal.valueOf(150.0));
+        p1.setStatusPedido(StatusPedido.PAGAMENTO_APROVADO);
+        p1.setCpf("4113123123");
+
+        p2 = new Pagamento();
+        p2.setId("6aa9beaba430d802b5b88412");
+        p2.setIdPedido("idpedido2");
+        p2.setTotal(BigDecimal.valueOf(150.0));
+        p2.setStatusPedido(StatusPedido.ERRO_PAGAMENTO);
+        p2.setCpf("41513123123");
+
+    }
 
     @Nested
     public class Pagamentos
@@ -40,7 +61,8 @@ public class PagamentoServiceTest {
             PedidoRepresentation pedido = new PedidoRepresentation(
                     "6aa9beaba430d802b5b88376",
                     StatusPedido.PENDENTE,
-                    BigDecimal.valueOf(48.00)
+                    BigDecimal.valueOf(48.00),
+                    "351312231"
             );
 
             when(pagamentoRepository.findByIdPedido(pagamento.getIdPedido()))
@@ -67,6 +89,7 @@ public class PagamentoServiceTest {
                     "6aa9beaba430d802b5b88376",
                     StatusPedido.PENDENTE,
                     BigDecimal.valueOf(48.00)
+                    ,"351312231"
             );
 
             when(pagamentoRepository.findByIdPedido(pagamento.getIdPedido()))
@@ -91,23 +114,12 @@ public class PagamentoServiceTest {
         @DisplayName("Deve listar todos os pagamentos")
         public void deverListarOsPagamentos()
         {
-            Pagamento p1 = new Pagamento();
-            p1.setId("6aa9beaba430d802b5b88376");
-            p1.setIdPedido("idpedido1");
-            p1.setTotal(BigDecimal.valueOf(150.0));
-            p1.setStatusPedido(StatusPedido.PAGAMENTO_APROVADO);
-
-            Pagamento p2 = new Pagamento();
-            p2.setId("6aa9beaba430d802b5b88412");
-            p2.setIdPedido("idpedido2");
-            p2.setTotal(BigDecimal.valueOf(150.0));
-            p2.setStatusPedido(StatusPedido.ERRO_PAGAMENTO);
 
             List<Pagamento> pagamentos = List.of(p1,p2);
 
-            when(pagamentoRepository.findAll()).thenReturn(pagamentos);
+            when(pagamentoRepository.findByCPFCliente(p1.getCpf())).thenReturn(pagamentos);
 
-            List<Pagamento> resultado = pagamentoService.listarPagamentos();
+            List<Pagamento> resultado = pagamentoService.listarPagamentos(p1.getCpf());
 
             assertEquals(pagamentos,resultado);
         }
@@ -119,9 +131,9 @@ public class PagamentoServiceTest {
         {
             List<Pagamento> pagamentos = List.of();
 
-            when(pagamentoRepository.findAll()).thenReturn(pagamentos);
+            when(pagamentoRepository.findByCPFCliente(p1.getCpf())).thenReturn(pagamentos);
 
-            List<Pagamento> resultado = pagamentoService.listarPagamentos();
+            List<Pagamento> resultado = pagamentoService.listarPagamentos(p1.getCpf());
 
             assertEquals(pagamentos,resultado);
         }

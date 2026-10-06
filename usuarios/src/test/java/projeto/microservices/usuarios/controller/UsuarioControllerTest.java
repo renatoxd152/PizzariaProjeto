@@ -71,6 +71,7 @@ public class UsuarioControllerTest {
         usuario.setId("id");
         usuario.setSenha("123456");
         usuario.setUsuarioRole(UsuarioRole.CLIENTE);
+        usuario.setCpf("4123123123");
         pizzaRepresentation = new PizzaRepresentation("Frango com Catupiry", BigDecimal.valueOf(49.9),"id");
 
         pedidoRepresentation = new PedidoRepresentation("idPedido",

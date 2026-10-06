@@ -6,5 +6,6 @@ import java.math.BigDecimal;
 
 public record PedidoRepresentation(String id,
                                    StatusPedido statusPedido,
-                                   BigDecimal total) {
+                                   BigDecimal total,
+                                   String cpf) {
 }

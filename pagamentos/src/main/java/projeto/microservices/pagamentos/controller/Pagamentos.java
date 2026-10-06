@@ -8,6 +8,7 @@ import projeto.microservices.pagamentos.controller.dto.PagamentoDTO;
 import projeto.microservices.pagamentos.controller.mappers.PagamentoMapper;
 import projeto.microservices.pagamentos.model.Pagamento;
 import projeto.microservices.pagamentos.service.PagamentoService;
+import projeto.microservices.pagamentos.subscriber.representation.PedidoRepresentation;
 
 import java.util.List;
 
@@ -27,10 +28,10 @@ public class Pagamentos {
         return ResponseEntity.ok(pagamento);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Pagamento>> listarPagamentos()
+    @GetMapping("{cpf}")
+    public ResponseEntity<List<Pagamento>> listarPagamentos(@PathVariable String cpf)
     {
         log.info("Listando todos os pagamentos!");
-        return ResponseEntity.ok(pagamentoService.listarPagamentos());
+        return ResponseEntity.ok(pagamentoService.listarPagamentos(cpf));
     }
 }

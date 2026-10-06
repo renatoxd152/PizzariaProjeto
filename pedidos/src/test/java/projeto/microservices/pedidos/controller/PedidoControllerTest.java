@@ -52,7 +52,7 @@ public class PedidoControllerTest {
     {
         pedidoDTO = new PedidoDTO("41613161212", List.of("id1"));
         pizzaRepresentation = new PizzaRepresentation("Frango com Catupiry", BigDecimal.valueOf(49.9),"id");
-        clienteRepresentation = new ClienteRepresentation("Client", "1613123132", "idCliente");
+        clienteRepresentation = new ClienteRepresentation("Client", "1613123132", "41613161212" ,"idCliente");
         pedido = new Pedido("idPedido", clienteRepresentation, List.of(pizzaRepresentation), BigDecimal.valueOf(49.9),StatusPedido.PENDENTE);
     }
 
@@ -66,7 +66,7 @@ public class PedidoControllerTest {
             when(pedidoService.adicionarPedido(pedidoDTO)).thenReturn(pedido);
 
             mockMvc.perform(post("/pedidos")
-                            .with(jwt().jwt(j -> j.claim("cpf", pedidoDTO.clienteCPF())))
+                            .with(jwt().jwt(j -> j.subject(pedidoDTO.clienteCPF())))
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(pedidoDTO)))
                     .andExpect(status().isOk());

@@ -54,7 +54,7 @@ public class PedidoServiceTest {
     @BeforeEach
     void setup()
     {
-        clienteRepresentation = new ClienteRepresentation("Renato","1644123312","id");
+        clienteRepresentation = new ClienteRepresentation("Renato","1644123312","4613123","id");
         pizzaRepresentation = new PizzaRepresentation("Frango com Catupiry", BigDecimal.valueOf(49.9),"id");
         this.pizzasResponse = ResponseEntity.ok(List.of(pizzaRepresentation));
         this.clienteResponse = ResponseEntity.ok(clienteRepresentation);
