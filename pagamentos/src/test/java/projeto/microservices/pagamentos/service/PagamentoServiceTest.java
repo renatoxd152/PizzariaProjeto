@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import projeto.microservices.pagamentos.model.Pagamento;
 import projeto.microservices.pagamentos.model.enums.StatusPedido;
 import projeto.microservices.pagamentos.repository.PagamentoRepository;
+import projeto.microservices.pagamentos.subscriber.representation.PagamentoRepresentation;
 import projeto.microservices.pagamentos.subscriber.representation.PedidoRepresentation;
 import java.math.BigDecimal;
 import java.util.List;
@@ -58,22 +59,23 @@ public class PagamentoServiceTest {
             pagamento.setIdPedido("6aa9beaba430d802b5b88376");
             pagamento.setTotal(BigDecimal.valueOf(48.00));
 
-            PedidoRepresentation pedido = new PedidoRepresentation(
+            PagamentoRepresentation pagamentoRepresentation = new PagamentoRepresentation(
                     "6aa9beaba430d802b5b88376",
+                    "idPedido",
                     StatusPedido.PENDENTE,
                     BigDecimal.valueOf(48.00),
                     "351312231"
             );
 
             when(pagamentoRepository.findByIdPedido(pagamento.getIdPedido()))
-                    .thenReturn(Optional.of(pedido));
+                    .thenReturn(Optional.of(pagamentoRepresentation));
 
             when(pagamentoRepository.save(any(Pagamento.class)))
                     .thenAnswer(invocation -> invocation.getArgument(0));
 
             Pagamento resultado = pagamentoService.pagar(pagamento);
 
-            assertEquals(pedido.total(),resultado.getTotal());
+            assertEquals(pagamentoRepresentation.total(),resultado.getTotal());
             assertEquals(StatusPedido.PAGAMENTO_APROVADO, resultado.getStatusPedido());
         }
 
@@ -85,22 +87,23 @@ public class PagamentoServiceTest {
             pagamento.setIdPedido("6aa9beaba430d802b5b88376");
             pagamento.setTotal(BigDecimal.valueOf(47.00));
 
-            PedidoRepresentation pedido = new PedidoRepresentation(
+            PagamentoRepresentation pagamentoRepresentation = new PagamentoRepresentation(
                     "6aa9beaba430d802b5b88376",
+                    "idPedido",
                     StatusPedido.PENDENTE,
                     BigDecimal.valueOf(48.00)
                     ,"351312231"
             );
 
             when(pagamentoRepository.findByIdPedido(pagamento.getIdPedido()))
-                    .thenReturn(Optional.of(pedido));
+                    .thenReturn(Optional.of(pagamentoRepresentation));
 
             when(pagamentoRepository.save(any(Pagamento.class)))
                     .thenAnswer(invocation -> invocation.getArgument(0));
 
             Pagamento resultado = pagamentoService.pagar(pagamento);
 
-            assertNotEquals(pedido.total(),resultado.getTotal());
+            assertNotEquals(pagamentoRepresentation.total(),resultado.getTotal());
             assertEquals(StatusPedido.ERRO_PAGAMENTO, resultado.getStatusPedido());
         }
     }

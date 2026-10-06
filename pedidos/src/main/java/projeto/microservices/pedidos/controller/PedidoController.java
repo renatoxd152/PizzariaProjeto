@@ -22,11 +22,6 @@ public class PedidoController {
     @PostMapping
     public ResponseEntity<Pedido> criarPedido(@RequestBody PedidoDTO pedidoDTO, @AuthenticationPrincipal Jwt jwt)
     {
-        if (!Objects.equals(jwt.getSubject(), pedidoDTO.clienteCPF())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
-                    "Você não pode criar pedidos para outro cliente");
-        }
-
         Pedido pedido = pedidoService.adicionarPedido(pedidoDTO);
         return ResponseEntity.ok(pedido);
     }

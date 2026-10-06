@@ -8,6 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 import projeto.microservices.pagamentos.model.Pagamento;
 import projeto.microservices.pagamentos.model.enums.StatusPedido;
 import projeto.microservices.pagamentos.repository.PagamentoRepository;
+import projeto.microservices.pagamentos.subscriber.representation.PagamentoRepresentation;
 import projeto.microservices.pagamentos.subscriber.representation.PedidoRepresentation;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class PagamentoService {
     private final PagamentoRepository pagamentoRepository;
     public Pagamento pagar(Pagamento pagamento) {
 
-        PedidoRepresentation pedidoRepresentation =
+        PagamentoRepresentation pedidoRepresentation =
                 pagamentoRepository.findByIdPedido(pagamento.getIdPedido())
                         .orElseThrow(() ->
                                 new ResponseStatusException(
@@ -31,7 +32,7 @@ public class PagamentoService {
 
         pagamentoCriado.setIdPedido(pedidoRepresentation.id());
         pagamentoCriado.setTotal(pagamento.getTotal());
-
+        pagamentoCriado.setCpf(pedidoRepresentation.cpf());
         if (pedidoRepresentation.statusPedido() != StatusPedido.PENDENTE) {
 
             pagamentoCriado.setStatusPedido(StatusPedido.ERRO_PAGAMENTO);
@@ -56,6 +57,7 @@ public class PagamentoService {
         pagamento.setIdPedido(pedidoCriado.id());
         pagamento.setStatusPedido(pedidoCriado.statusPedido());
         pagamento.setTotal(pedidoCriado.total());
+        pagamento.setCpf(pedidoCriado.clienteRepresentation().cpf());
         pagamentoRepository.save(pagamento);
     }
 

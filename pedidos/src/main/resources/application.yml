@@ -21,8 +21,8 @@ server:
 
 
 clients:
-  clientes:
-    url: 'http://localhost:8080/clientes'
+  usuarios:
+    url: 'http://localhost:8080/usuarios'
   pizzas:
     url: 'http://localhost:8081/pizzas'
   config:

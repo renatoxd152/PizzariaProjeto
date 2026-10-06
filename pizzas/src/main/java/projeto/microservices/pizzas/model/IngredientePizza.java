@@ -7,11 +7,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import projeto.microservices.pizzas.model.enums.UnidadeMedida;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Getter
 @Setter
 public class IngredientePizza {
-    private String id;
+    private String id = UUID.randomUUID().toString();
     private String nomeIngrediente;
     private BigDecimal quantidade;
     private UnidadeMedida unidadeMedida;

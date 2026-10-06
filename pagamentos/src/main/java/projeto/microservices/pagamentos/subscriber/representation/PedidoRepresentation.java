@@ -7,5 +7,5 @@ import java.math.BigDecimal;
 public record PedidoRepresentation(String id,
                                    StatusPedido statusPedido,
                                    BigDecimal total,
-                                   String cpf) {
+                                   ClienteRepresentation clienteRepresentation) {
 }

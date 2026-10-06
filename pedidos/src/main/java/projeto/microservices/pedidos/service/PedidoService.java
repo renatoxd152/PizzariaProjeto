@@ -1,10 +1,14 @@
 package projeto.microservices.pedidos.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import projeto.microservices.pedidos.client.ClienteClient;
 import projeto.microservices.pedidos.client.PizzaClient;
+import projeto.microservices.pedidos.client.enums.UsuarioRole;
 import projeto.microservices.pedidos.client.representation.ClienteRepresentation;
 import projeto.microservices.pedidos.client.representation.PizzaRepresentation;
 import projeto.microservices.pedidos.controller.dto.PedidoDTO;
@@ -26,6 +30,10 @@ public class PedidoService {
 
     public Pedido adicionarPedido(PedidoDTO pedidoDTO) {
         ResponseEntity<ClienteRepresentation> clienteRepresentation = clienteClient.obterDadosDoCliente(pedidoDTO.clienteCPF());
+        if (clienteRepresentation.getBody().usuarioRole() != UsuarioRole.CLIENTE)
+        {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "O CPF informado não pertence a um cliente!");
+        }
         ResponseEntity<List<PizzaRepresentation>> pizzaRepresentation = pizzaClient.obterDadosDaPizza(pedidoDTO.pizzasIds());
         Pedido pedido = criarPedido(clienteRepresentation, pizzaRepresentation);
         Pedido pedidoSalvo = pedidoRepository.save(pedido);

@@ -42,7 +42,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/usuarios/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/usuarios/*/pedidos").hasAnyRole("ADMIN", "CLIENTE")
                         .requestMatchers(HttpMethod.GET, "/usuarios").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/usuarios/cpf/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/usuarios/cpf/*").hasAnyRole("ADMIN","CLIENTE")
                         .requestMatchers(HttpMethod.GET, "/usuarios/*").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/usuarios/**").hasAnyRole("CLIENTE","ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/usuarios/**").hasAnyRole("CLIENTE","ADMIN")
