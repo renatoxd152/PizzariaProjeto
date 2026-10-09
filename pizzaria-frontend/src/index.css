@@ -1,0 +1,88 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap");
+
+:root {
+  --bs-primary: #d62828;
+  --bs-primary-rgb: 214, 40, 40;
+}
+
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Painel lateral */
+.auth-brand {
+  background:
+          radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.12), transparent 40%),
+          linear-gradient(160deg, #c1121f 0%, #e85d04 100%);
+  color: #fff;
+}
+
+.auth-emoji {
+  font-size: 5rem;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.25));
+}
+
+.auth-title {
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+}
+
+.auth-divider {
+  width: 56px;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.7);
+  margin: 0 auto 1.5rem;
+}
+
+.auth-subtitle {
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1.6;
+  opacity: 0.95;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+}
+
+.auth-benefits li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 500;
+  font-size: 1rem;
+  margin-bottom: 0.9rem;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.auth-check {
+  flex: 0 0 auto;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+/* Botão e foco com a cor da marca */
+.btn-primary {
+  --bs-btn-bg: #d62828;
+  --bs-btn-border-color: #d62828;
+  --bs-btn-hover-bg: #b81f1f;
+  --bs-btn-hover-border-color: #b81f1f;
+  --bs-btn-active-bg: #a01919;
+  --bs-btn-active-border-color: #a01919;
+  --bs-btn-disabled-bg: #d62828;
+  --bs-btn-disabled-border-color: #d62828;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #d62828;
+  box-shadow: 0 0 0 0.25rem rgba(214, 40, 40, 0.18);
+}
