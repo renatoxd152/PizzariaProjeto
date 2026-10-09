@@ -46,6 +46,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/usuarios/*").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/usuarios/**").hasAnyRole("CLIENTE","ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/usuarios/**").hasAnyRole("CLIENTE","ADMIN")
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**",
+                                "/v3/api-docs.yaml"
+                        ).permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
