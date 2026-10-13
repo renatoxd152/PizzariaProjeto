@@ -1,4 +1,4 @@
-import {type Usuario, UsuarioRole} from "../../models/Usuario/Usuario.ts";
+import {type Usuario, UsuarioRole} from "../../../models/Usuario/Usuario.ts";
 import * as React from "react";
 import {z} from "zod";
 import {useForm} from "react-hook-form";

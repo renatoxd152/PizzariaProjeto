@@ -1,4 +1,4 @@
-import {CadastroUsuario} from "../../components/Usuario";
+import {CadastroUsuario} from "../../../components/Usuario/cadastro";
 
 export default () =>
 {
