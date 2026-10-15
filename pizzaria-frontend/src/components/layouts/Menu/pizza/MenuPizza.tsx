@@ -1,7 +1,8 @@
 import * as React from "react";
-import { useMemo, useState } from "react";
-import { MenuInicial } from "../../components/layouts/Menu/LayoutMenu.tsx";
-import { PizzaItem } from "../../components/pizzas/PizzaItem.tsx";
+import {useMemo, useState} from "react";
+import {useNavigate} from "react-router";
+import {MenuInicial} from "../LayoutMenu.tsx";
+import {PizzaItem} from "../../../pizzas/PizzaItem.tsx";
 
 type Categoria = "Tradicional" | "Especial" | "Doce";
 
@@ -169,7 +170,7 @@ export const MenuPizzasCliente: React.FC = () => {
     const [busca, setBusca] = useState("");
     const [categoria, setCategoria] = useState<"Todas" | Categoria>("Todas");
     const [qtdPedido, setQtdPedido] = useState(0);
-
+    const navigate = useNavigate();
     const pizzasFiltradas = useMemo(() => {
         const termo = busca.trim().toLowerCase();
         return pizzas.filter(
@@ -185,8 +186,19 @@ export const MenuPizzasCliente: React.FC = () => {
             titulo="Cardápio de Pizzas"
             subtitulo="Escolha sua pizza favorita e monte seu pedido"
             acoes={
-                <button className="btn btn-success">
-                    Ver pedido {qtdPedido > 0 && <span className="badge text-bg-light ms-1">{qtdPedido}</span>}
+                <button
+                    type="button"
+                    className="btn btn-success rounded-circle position-relative d-flex align-items-center justify-content-center"
+                    style={{ width: 48, height: 48 }}
+                    aria-label={`Carrinho, ${qtdPedido} itens`}
+                    onClick={() => navigate("/carrinho")}
+                >
+                    <i className="bi bi-cart3 fs-5"></i>
+                    {qtdPedido > 0 && (
+                        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {qtdPedido}
+            </span>
+                    )}
                 </button>
             }
         >

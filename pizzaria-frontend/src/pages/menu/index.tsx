@@ -1,4 +1,4 @@
-import {MenuPizzasCliente} from "./MenuPizzasCliente.tsx";
+import {MenuPizzasCliente} from "../../components/layouts/Menu/pizza/MenuPizza.tsx";
 
 export default () =>
 {

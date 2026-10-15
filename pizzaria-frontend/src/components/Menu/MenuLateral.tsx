@@ -28,8 +28,6 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({
         <aside className={`menu-lateral bg-dark text-white ${className}`}>
             <div className="menu-lateral__topo d-flex align-items-center justify-content-between p-3">
                 <h5 className="mb-0">{titulo}</h5>
-
-                {/* botão hambúrguer: só aparece no celular */}
                 <button
                     type="button"
                     className="btn btn-outline-light btn-sm d-md-none"
