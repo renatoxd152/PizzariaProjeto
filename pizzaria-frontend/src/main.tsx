@@ -5,11 +5,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import App from './App.tsx'
 import {BrowserRouter} from "react-router";
+import {CarrinhoProvider} from "./contexts/CarrinhoContext.tsx";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
       <BrowserRouter>
+          <CarrinhoProvider>
           <App />
+          </CarrinhoProvider>
       </BrowserRouter>
   </StrictMode>,
 )

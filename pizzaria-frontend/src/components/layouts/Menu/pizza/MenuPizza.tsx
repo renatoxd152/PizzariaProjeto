@@ -3,183 +3,255 @@ import {useMemo, useState} from "react";
 import {useNavigate} from "react-router";
 import {MenuInicial} from "../LayoutMenu.tsx";
 import {PizzaItem} from "../../../pizzas/PizzaItem.tsx";
+import type {Pizza} from "../../../../models/Pizza/Pizza.ts";
+import {TamanhoPizza} from "../../../../models/Pizza/Pizza.ts";
+import {UnidadeMedida} from "../../../../models/Pizza/IngredientePizza.ts";
+import {useCarrinho} from "../../../../contexts/CarrinhoContext.tsx";
 
-type Categoria = "Tradicional" | "Especial" | "Doce";
-
-interface Pizza {
-    id: number;
-    nome: string;
-    descricao: string;
-    categoria: Categoria;
-    preco: number;
-    imagem: string;
-}
-
-const CATEGORIAS: ("Todas" | Categoria)[] = ["Todas", "Tradicional", "Especial", "Doce"];
-
-const pizzas: Pizza[] = [
+export const pizzas: Pizza[] = [
     {
         id: 1,
         nome: "Mussarela",
-        descricao: "Molho de tomate, mussarela, tomate fatiado e manjericão.",
-        categoria: "Tradicional",
-        preco: 44.9,
+        preco: 44.90,
+        tamanhoPizza: TamanhoPizza.GRANDE,
         imagem: "/imagens/mussarela.jpg",
+        ingredientes: [
+            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Tomate", quantidade: 4, unidadeMedida: UnidadeMedida.FATIA },
+            { nomeIngrediente: "Manjericão", quantidade: 5, unidadeMedida: UnidadeMedida.UNIDADE }
+        ]
     },
     {
         id: 2,
         nome: "Pepperoni",
-        descricao: "Molho de tomate, mussarela e fatias de pepperoni.",
-        categoria: "Especial",
-        preco: 47.9,
+        preco: 47.90,
+        tamanhoPizza: TamanhoPizza.GRANDE,
         imagem: "/imagens/pepperoni.jpg",
+        ingredientes: [
+            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
+        ]
     },
     {
         id: 3,
         nome: "Pepperoni",
-        descricao: "Molho de tomate, mussarela e fatias de pepperoni.",
-        categoria: "Especial",
-        preco: 47.9,
+        preco: 47.90,
+        tamanhoPizza: TamanhoPizza.GRANDE,
         imagem: "/imagens/pepperoni.jpg",
+        ingredientes: [
+            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
+        ]
     },
     {
         id: 4,
         nome: "Pepperoni",
-        descricao: "Molho de tomate, mussarela e fatias de pepperoni.",
-        categoria: "Especial",
-        preco: 47.9,
+        preco: 47.90,
+        tamanhoPizza: TamanhoPizza.GRANDE,
         imagem: "/imagens/pepperoni.jpg",
-    },{
+        ingredientes: [
+            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
+        ]
+    },
+    {
         id: 5,
         nome: "Pepperoni",
-        descricao: "Molho de tomate, mussarela e fatias de pepperoni.",
-        categoria: "Especial",
-        preco: 47.9,
+        preco: 47.90,
+        tamanhoPizza: TamanhoPizza.GRANDE,
         imagem: "/imagens/pepperoni.jpg",
+        ingredientes: [
+            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
+        ]
     },
     {
         id: 6,
         nome: "Pepperoni",
-        descricao: "Molho de tomate, mussarela e fatias de pepperoni.",
-        categoria: "Especial",
-        preco: 47.9,
+        preco: 47.90,
+        tamanhoPizza: TamanhoPizza.GRANDE,
         imagem: "/imagens/pepperoni.jpg",
+        ingredientes: [
+            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
+        ]
     },
     {
         id: 7,
         nome: "Pepperoni",
-        descricao: "Molho de tomate, mussarela e fatias de pepperoni.",
-        categoria: "Especial",
-        preco: 47.9,
+        preco: 47.90,
+        tamanhoPizza: TamanhoPizza.GRANDE,
         imagem: "/imagens/pepperoni.jpg",
+        ingredientes: [
+            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
+        ]
     },
     {
-        id: 7,
+        id: 8,
         nome: "Pepperoni",
-        descricao: "Molho de tomate, mussarela e fatias de pepperoni.",
-        categoria: "Especial",
-        preco: 47.9,
+        preco: 47.90,
+        tamanhoPizza: TamanhoPizza.GRANDE,
         imagem: "/imagens/pepperoni.jpg",
+        ingredientes: [
+            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
+        ]
     },
     {
-        id: 7,
+        id: 9,
         nome: "Pepperoni",
-        descricao: "Molho de tomate, mussarela e fatias de pepperoni.",
-        categoria: "Especial",
-        preco: 47.9,
+        preco: 47.90,
+        tamanhoPizza: TamanhoPizza.GRANDE,
         imagem: "/imagens/pepperoni.jpg",
+        ingredientes: [
+            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
+        ]
     },
     {
-        id: 7,
+        id: 10,
         nome: "Pepperoni",
-        descricao: "Molho de tomate, mussarela e fatias de pepperoni.",
-        categoria: "Especial",
-        preco: 47.9,
+        preco: 47.90,
+        tamanhoPizza: TamanhoPizza.GRANDE,
         imagem: "/imagens/pepperoni.jpg",
+        ingredientes: [
+            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
+        ]
     },
     {
-        id: 7,
+        id: 11,
         nome: "Pepperoni",
-        descricao: "Molho de tomate, mussarela e fatias de pepperoni.",
-        categoria: "Especial",
-        preco: 47.9,
+        preco: 47.90,
+        tamanhoPizza: TamanhoPizza.GRANDE,
         imagem: "/imagens/pepperoni.jpg",
+        ingredientes: [
+            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
+        ]
     },
     {
-        id: 7,
+        id: 12,
         nome: "Pepperoni",
-        descricao: "Molho de tomate, mussarela e fatias de pepperoni.",
-        categoria: "Especial",
-        preco: 47.9,
+        preco: 47.90,
+        tamanhoPizza: TamanhoPizza.GRANDE,
         imagem: "/imagens/pepperoni.jpg",
+        ingredientes: [
+            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
+        ]
     },
     {
-        id: 7,
+        id: 13,
         nome: "Pepperoni",
-        descricao: "Molho de tomate, mussarela e fatias de pepperoni.",
-        categoria: "Especial",
-        preco: 47.9,
+        preco: 47.90,
+        tamanhoPizza: TamanhoPizza.GRANDE,
         imagem: "/imagens/pepperoni.jpg",
-    },{
-        id: 7,
-        nome: "Pepperoni",
-        descricao: "Molho de tomate, mussarela e fatias de pepperoni.",
-        categoria: "Especial",
-        preco: 47.9,
-        imagem: "/imagens/pepperoni.jpg",
-    },{
-        id: 7,
-        nome: "Pepperoni",
-        descricao: "Molho de tomate, mussarela e fatias de pepperoni.",
-        categoria: "Especial",
-        preco: 47.9,
-        imagem: "/imagens/pepperoni.jpg",
-    },{
-        id: 7,
-        nome: "Pepperoni",
-        descricao: "Molho de tomate, mussarela e fatias de pepperoni.",
-        categoria: "Especial",
-        preco: 47.9,
-        imagem: "/imagens/pepperoni.jpg",
-    },{
-        id: 7,
-        nome: "Pepperoni",
-        descricao: "Molho de tomate, mussarela e fatias de pepperoni.",
-        categoria: "Especial",
-        preco: 47.9,
-        imagem: "/imagens/pepperoni.jpg",
-    },{
-        id: 7,
-        nome: "Pepperoni",
-        descricao: "Molho de tomate, mussarela e fatias de pepperoni.",
-        categoria: "Especial",
-        preco: 47.9,
-        imagem: "/imagens/pepperoni.jpg",
+        ingredientes: [
+            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
+        ]
     },
-
-
-
-
-
-
-
-
+    {
+        id: 14,
+        nome: "Pepperoni",
+        preco: 47.90,
+        tamanhoPizza: TamanhoPizza.GRANDE,
+        imagem: "/imagens/pepperoni.jpg",
+        ingredientes: [
+            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
+        ]
+    },
+    {
+        id: 15,
+        nome: "Pepperoni",
+        preco: 47.90,
+        tamanhoPizza: TamanhoPizza.GRANDE,
+        imagem: "/imagens/pepperoni.jpg",
+        ingredientes: [
+            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
+        ]
+    },
+    {
+        id: 16,
+        nome: "Pepperoni",
+        preco: 47.90,
+        tamanhoPizza: TamanhoPizza.GRANDE,
+        imagem: "/imagens/pepperoni.jpg",
+        ingredientes: [
+            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
+        ]
+    },
+    {
+        id: 17,
+        nome: "Pepperoni",
+        preco: 47.90,
+        tamanhoPizza: TamanhoPizza.GRANDE,
+        imagem: "/imagens/pepperoni.jpg",
+        ingredientes: [
+            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
+        ]
+    },
+    {
+        id: 18,
+        nome: "Pepperoni",
+        preco: 47.90,
+        tamanhoPizza: TamanhoPizza.GRANDE,
+        imagem: "/imagens/pepperoni.jpg",
+        ingredientes: [
+            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
+            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
+        ]
+    }
 ];
 
 export const MenuPizzasCliente: React.FC = () => {
     const [busca, setBusca] = useState("");
-    const [categoria, setCategoria] = useState<"Todas" | Categoria>("Todas");
-    const [qtdPedido, setQtdPedido] = useState(0);
     const navigate = useNavigate();
+    const {totalItens, adicionarPizza} = useCarrinho();
     const pizzasFiltradas = useMemo(() => {
         const termo = busca.trim().toLowerCase();
         return pizzas.filter(
             (p) =>
-                (categoria === "Todas" || p.categoria === categoria) &&
-                (p.nome.toLowerCase().includes(termo) ||
-                    p.descricao.toLowerCase().includes(termo))
+                p.nome.toLowerCase().includes(termo) ||
+                p.ingredientes.some((i) =>
+                    i.nomeIngrediente.toLowerCase().includes(termo)
+                )
         );
-    }, [busca, categoria]);
+    }, [busca]);
+
+    const descricaoPizza = (p: Pizza) =>
+        p.ingredientes
+            .map((i) => `${i.nomeIngrediente} (${i.quantidade} ${i.unidadeMedida.toLowerCase()})`)
+            .join(", ");
+
+    const handleAdicionarPizza =(pizza: Pizza) =>
+    {
+        adicionarPizza(pizza);
+    }
 
     return (
         <MenuInicial
@@ -190,14 +262,14 @@ export const MenuPizzasCliente: React.FC = () => {
                     type="button"
                     className="btn btn-success rounded-circle position-relative d-flex align-items-center justify-content-center"
                     style={{ width: 48, height: 48 }}
-                    aria-label={`Carrinho, ${qtdPedido} itens`}
+                    aria-label={`Carrinho, ${totalItens} itens`}
                     onClick={() => navigate("/carrinho")}
                 >
                     <i className="bi bi-cart3 fs-5"></i>
-                    {qtdPedido > 0 && (
+                    {totalItens > 0 && (
                         <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {qtdPedido}
-            </span>
+            {totalItens}
+        </span>
                     )}
                 </button>
             }
@@ -212,18 +284,6 @@ export const MenuPizzasCliente: React.FC = () => {
                     onChange={(e) => setBusca(e.target.value)}
                     aria-label="Buscar pizza"
                 />
-                <div className="btn-group" role="group" aria-label="Filtrar por categoria">
-                    {CATEGORIAS.map((c) => (
-                        <button
-                            key={c}
-                            type="button"
-                            className={`btn btn-sm ${categoria === c ? "btn-success" : "btn-outline-success"}`}
-                            onClick={() => setCategoria(c)}
-                        >
-                            {c}
-                        </button>
-                    ))}
-                </div>
             </div>
 
             {pizzasFiltradas.length === 0 ? (
@@ -237,11 +297,10 @@ export const MenuPizzasCliente: React.FC = () => {
                         <div key={p.id} className="col">
                             <PizzaItem
                                 nome={p.nome}
-                                descricao={p.descricao}
-                                categoria={p.categoria}
+                                descricao={descricaoPizza(p)}
                                 preco={p.preco}
                                 imagem={p.imagem}
-                                onAdicionar={() => setQtdPedido((q) => q + 1)}
+                                onAdicionar={() => handleAdicionarPizza(p)}
                             />
                         </div>
                     ))}

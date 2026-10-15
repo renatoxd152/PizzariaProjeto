@@ -4,7 +4,6 @@ import "./index.css";
 interface PizzaItemProps {
     nome: string;
     descricao: string;
-    categoria: string;
     preco: number;
     imagem: string;
     onAdicionar?: () => void;
@@ -13,7 +12,6 @@ interface PizzaItemProps {
 export const PizzaItem: React.FC<PizzaItemProps> = ({
                                                         nome,
                                                         descricao,
-                                                        categoria,
                                                         preco,
                                                         imagem,
                                                         onAdicionar,
@@ -27,7 +25,6 @@ export const PizzaItem: React.FC<PizzaItemProps> = ({
         <article className="card h-100 shadow-sm card-produto">
             <div className="card-produto__imagem">
                 <img src={imagem} alt={nome} loading="lazy" className="card-img-top" />
-                <span className="badge text-bg-light card-produto__categoria">{categoria}</span>
             </div>
 
             <div className="card-body d-flex flex-column">

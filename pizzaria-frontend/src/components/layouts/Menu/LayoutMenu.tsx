@@ -5,7 +5,7 @@ import { MenuLateral, type ItemMenu } from "../../Menu/MenuLateral.tsx";
 import "./index.css";
 
 interface LayoutProps {
-    titulo: string;
+    titulo:ReactNode;
     subtitulo?: string;
     acoes?: ReactNode;
     children?: ReactNode;
