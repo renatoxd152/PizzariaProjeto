@@ -1,5 +1,5 @@
 import * as React from "react";
-import {LayoutTelaInicial} from "../../layouts";
+import {LayoutTelaInicial} from "../../layouts/TelaInicial";
 import {useState} from "react";
 import {LoginUsuarioForm} from "./form.tsx";
 

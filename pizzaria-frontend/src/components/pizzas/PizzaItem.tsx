@@ -1,0 +1,46 @@
+import * as React from "react";
+import "./index.css";
+
+interface PizzaItemProps {
+    nome: string;
+    descricao: string;
+    categoria: string;
+    preco: number;
+    imagem: string;
+    onAdicionar?: () => void;
+}
+
+export const PizzaItem: React.FC<PizzaItemProps> = ({
+                                                        nome,
+                                                        descricao,
+                                                        categoria,
+                                                        preco,
+                                                        imagem,
+                                                        onAdicionar,
+                                                    }) => {
+    const precoFormatado = preco.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+    });
+
+    return (
+        <article className="card h-100 shadow-sm card-produto">
+            <div className="card-produto__imagem">
+                <img src={imagem} alt={nome} loading="lazy" className="card-img-top" />
+                <span className="badge text-bg-light card-produto__categoria">{categoria}</span>
+            </div>
+
+            <div className="card-body d-flex flex-column">
+                <h2 className="h5 card-title mb-1">{nome}</h2>
+                <p className="card-text text-muted small card-produto__descricao">{descricao}</p>
+
+                <div className="d-flex align-items-center justify-content-between mt-auto pt-3">
+                    <span className="fw-bold text-success fs-5">{precoFormatado}</span>
+                    <button type="button" className="btn btn-success btn-sm" onClick={onAdicionar}>
+                        Adicionar
+                    </button>
+                </div>
+            </div>
+        </article>
+    );
+};

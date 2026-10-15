@@ -1,0 +1,44 @@
+.menu-lateral {
+    width: 100%;
+}
+
+.menu-lateral__conteudo {
+    display: none;
+}
+
+.menu-lateral__conteudo--aberto {
+    display: block;
+}
+
+.menu-lateral .nav-pills .nav-link.active {
+    background-color: #198754;
+}
+
+.menu-lateral .nav-pills .nav-link:not(.active):hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+@media (min-width: 768px) {
+    .menu-lateral {
+        width: 240px;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+        align-self: flex-start;
+    }
+
+    .menu-lateral__topo {
+        padding-bottom: 0 !important;
+    }
+
+    .menu-lateral__conteudo {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        padding-top: 1.5rem;
+    }
+}

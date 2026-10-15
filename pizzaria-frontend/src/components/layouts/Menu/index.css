@@ -1,0 +1,36 @@
+.pagina {
+    background: #f5f6f8;
+}
+
+.pagina__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+    padding: 1.25rem 1.5rem;
+    background: #fff;
+    border-radius: 12px;
+    border-left: 6px solid #198754;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.pagina__titulo {
+    margin: 0;
+    font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #1f2937;
+}
+
+.pagina__subtitulo {
+    margin: 0.25rem 0 0;
+    color: #6b7280;
+    font-size: 0.95rem;
+}
+
+.pagina__acoes {
+    display: flex;
+    gap: 0.5rem;
+}

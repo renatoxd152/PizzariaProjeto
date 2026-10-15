@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useState} from "react";
-import {LayoutTelaInicial} from "../../layouts";
+import {LayoutTelaInicial} from "../../layouts/TelaInicial";
 import {CadastroUsuarioForm} from "./form.tsx";
 import type {Usuario} from "../../../models/Usuario/Usuario.ts";
 
