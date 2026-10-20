@@ -6,7 +6,7 @@ interface PizzaItemProps {
     descricao: string;
     preco: number;
     imagem: string;
-    onAdicionar?: () => void;
+    onClick: () => void;
 }
 
 export const PizzaItem: React.FC<PizzaItemProps> = ({
@@ -14,7 +14,7 @@ export const PizzaItem: React.FC<PizzaItemProps> = ({
                                                         descricao,
                                                         preco,
                                                         imagem,
-                                                        onAdicionar,
+                                                        onClick
                                                     }) => {
     const precoFormatado = preco.toLocaleString("pt-BR", {
         style: "currency",
@@ -22,7 +22,7 @@ export const PizzaItem: React.FC<PizzaItemProps> = ({
     });
 
     return (
-        <article className="card h-100 shadow-sm card-produto">
+        <article className="card h-100 shadow-sm card-produto" onClick={onClick}>
             <div className="card-produto__imagem">
                 <img src={imagem} alt={nome} loading="lazy" className="card-img-top" />
             </div>
@@ -33,9 +33,6 @@ export const PizzaItem: React.FC<PizzaItemProps> = ({
 
                 <div className="d-flex align-items-center justify-content-between mt-auto pt-3">
                     <span className="fw-bold text-success fs-5">{precoFormatado}</span>
-                    <button type="button" className="btn btn-success btn-sm" onClick={onAdicionar}>
-                        Adicionar
-                    </button>
                 </div>
             </div>
         </article>

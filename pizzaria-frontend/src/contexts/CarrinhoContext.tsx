@@ -11,20 +11,20 @@ export interface ProdutosPorTipo {
 export type TipoItem = keyof ProdutosPorTipo;
 
 export type ItemCarrinho = {
-    [K in TipoItem]: { tipo: K; produto: ProdutosPorTipo[K]; quantidade: number };
+    [K in TipoItem]: { tipo: K; produto: ProdutosPorTipo[K]; quantidade: number; };
 }[TipoItem];
 
 interface CarrinhoContextType {
     itens: ItemCarrinho[];
     totalItens: number;
     valorTotal: number;
-    adicionar: <K extends TipoItem>(tipo: K, produto: ProdutosPorTipo[K]) => void;
+    adicionar: <K extends TipoItem>(tipo: K, produto: ProdutosPorTipo[K], quantidade?: number) => void;
     alterarQuantidade: (tipo: TipoItem, id: number, delta: number) => void;
     removerItem: (tipo: TipoItem, id: number) => void;
     limparCarrinho: () => void;
 }
 
-const CHAVE_CARRINHO = "carrinho";
+const CHAVE_CARRINHO = "carrinho"
 const TIPOS_VALIDOS: string[] = ["pizza", "bebida"];
 
 const CarrinhoContext = createContext<CarrinhoContextType | undefined>(undefined);
@@ -53,12 +53,14 @@ export const CarrinhoProvider: React.FC<{children: React.ReactNode}> = ({childre
         localStorage.setItem(CHAVE_CARRINHO, JSON.stringify(itens));
     }, [itens]);
 
-    const adicionar = <K extends TipoItem>(tipo: K, produto: ProdutosPorTipo[K]) =>
+    const adicionar = <K extends TipoItem>(tipo: K, produto: ProdutosPorTipo[K], quantidade = 1) =>
         setItens((atual) => {
             const existe = atual.some((i) => mesmoItem(i, tipo, produto.id));
             return existe
-                ? atual.map((i) => mesmoItem(i, tipo, produto.id) ? {...i, quantidade: i.quantidade + 1} : i)
-                : [...atual, {tipo, produto, quantidade: 1} as ItemCarrinho];
+                ? atual.map((i) =>
+                    mesmoItem(i, tipo, produto.id) ? {...i, quantidade: i.quantidade + quantidade} : i
+                )
+                : [...atual, {tipo, produto, quantidade} as ItemCarrinho];
         });
 
     const alterarQuantidade = (tipo: TipoItem, id: number, delta: number) =>

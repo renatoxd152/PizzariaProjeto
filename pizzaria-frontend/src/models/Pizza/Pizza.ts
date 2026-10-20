@@ -17,4 +17,5 @@ export interface Pizza
     tamanhoPizza:TamanhoPizza;
     ingredientes: Array<IngredientePizza>;
     imagem: string;
+    observacao?:string;
 }

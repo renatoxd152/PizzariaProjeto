@@ -231,7 +231,7 @@ export const pizzas: Pizza[] = [
 export const MenuPizzasCliente: React.FC = () => {
     const [busca, setBusca] = useState("");
     const navigate = useNavigate();
-    const {totalItens, adicionar} = useCarrinho();
+    const {totalItens} = useCarrinho();
     const pizzasFiltradas = useMemo(() => {
         const termo = busca.trim().toLowerCase();
         return pizzas.filter(
@@ -247,11 +247,6 @@ export const MenuPizzasCliente: React.FC = () => {
         p.ingredientes
             .map((i) => `${i.nomeIngrediente} (${i.quantidade} ${i.unidadeMedida.toLowerCase()})`)
             .join(", ");
-
-    const handleAdicionarPizza =(pizza: Pizza) =>
-    {
-        adicionar("pizza",pizza);
-    }
 
     return (
         <MenuInicial
@@ -300,7 +295,7 @@ export const MenuPizzasCliente: React.FC = () => {
                                 descricao={descricaoPizza(p)}
                                 preco={p.preco}
                                 imagem={p.imagem}
-                                onAdicionar={() => handleAdicionarPizza(p)}
+                                onClick={() => navigate(`/editar/pizza/${p.id}`)}
                             />
                         </div>
                     ))}
