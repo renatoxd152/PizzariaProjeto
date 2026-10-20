@@ -9,9 +9,8 @@ const formatarPreco = (valor: number) =>
 export const CarrinhoCliente: React.FC = () =>
 {
     const navigate = useNavigate();
-    const {itens, totalItens, alterarQuantidade, removerPizza, limparCarrinho} = useCarrinho();
+    const {itens, totalItens, valorTotal: subtotal, alterarQuantidade, removerItem, limparCarrinho} = useCarrinho();
 
-    const subtotal = itens.reduce((soma, i) => soma + i.pizza.preco * i.quantidade, 0);
     const taxaEntrega = itens.length > 0 ? 5 : 0;
     const total = subtotal + taxaEntrega;
 
@@ -30,64 +29,70 @@ export const CarrinhoCliente: React.FC = () =>
                 </div>
             ) : (
                 <div className="row g-4">
-                    {/* Lista de itens */}
                     <div className="col-lg-8">
                         <div className="card">
                             <ul className="list-group list-group-flush">
-                                {itens.map(({pizza, quantidade}) => (
-                                    <li key={pizza.id} className="list-group-item">
-                                        <div className="d-flex gap-3 align-items-center">
-                                            <img
-                                                src={pizza.imagem}
-                                                alt={pizza.nome}
-                                                className="rounded"
-                                                style={{width: 80, height: 80, objectFit: "cover"}}
-                                            />
+                                {itens.map((item) => {
+                                    const {tipo, produto, quantidade} = item;
+                                    return (
+                                        <li key={`${tipo}-${produto.id}`} className="list-group-item">
+                                            <div className="d-flex gap-3 align-items-center">
+                                                <img
+                                                    src={produto.imagem}
+                                                    alt={produto.nome}
+                                                    className="rounded"
+                                                    style={{width: 80, height: 80, objectFit: "cover"}}
+                                                />
 
-                                            <div className="flex-grow-1">
-                                                <h6 className="mb-0">{pizza.nome}</h6>
-                                                <small className="text-muted d-block">
-                                                    Tamanho: {pizza.tamanhoPizza}
-                                                </small>
-                                                <small className="text-muted">
-                                                    {pizza.ingredientes.map((i) => i.nomeIngrediente).join(", ")}
-                                                </small>
-                                            </div>
+                                                <div className="flex-grow-1">
+                                                    <h6 className="mb-0">{produto.nome}</h6>
+                                                    {item.tipo === "pizza" && (
+                                                        <>
+                                                            <small className="text-muted d-block">
+                                                                Tamanho: {item.produto.tamanhoPizza}
+                                                            </small>
+                                                            <small className="text-muted">
+                                                                {item.produto.ingredientes.map((i) => i.nomeIngrediente).join(", ")}
+                                                            </small>
+                                                        </>
+                                                    )}
+                                                </div>
 
-                                            <div className="d-flex align-items-center gap-2">
-                                                <button
-                                                    className="btn btn-sm btn-outline-secondary"
-                                                    onClick={() => alterarQuantidade(pizza.id, -1)}
-                                                    aria-label="Diminuir quantidade"
-                                                >
-                                                    −
-                                                </button>
-                                                <span style={{minWidth: 24}} className="text-center">
-                                                    {quantidade}
-                                                </span>
-                                                <button
-                                                    className="btn btn-sm btn-outline-secondary"
-                                                    onClick={() => alterarQuantidade(pizza.id, 1)}
-                                                    aria-label="Aumentar quantidade"
-                                                >
-                                                    +
-                                                </button>
-                                            </div>
-
-                                            <div className="text-end" style={{minWidth: 100}}>
-                                                <strong>{formatarPreco(pizza.preco * quantidade)}</strong>
-                                                <div>
+                                                <div className="d-flex align-items-center gap-2">
                                                     <button
-                                                        className="btn btn-link btn-sm text-danger p-0"
-                                                        onClick={() => removerPizza(pizza.id)}
+                                                        className="btn btn-sm btn-outline-secondary"
+                                                        onClick={() => alterarQuantidade(tipo, produto.id, -1)}
+                                                        aria-label="Diminuir quantidade"
                                                     >
-                                                        Remover
+                                                        −
+                                                    </button>
+                                                    <span style={{minWidth: 24}} className="text-center">
+                                                        {quantidade}
+                                                    </span>
+                                                    <button
+                                                        className="btn btn-sm btn-outline-secondary"
+                                                        onClick={() => alterarQuantidade(tipo, produto.id, 1)}
+                                                        aria-label="Aumentar quantidade"
+                                                    >
+                                                        +
                                                     </button>
                                                 </div>
+
+                                                <div className="text-end" style={{minWidth: 100}}>
+                                                    <strong>{formatarPreco(produto.preco * quantidade)}</strong>
+                                                    <div>
+                                                        <button
+                                                            className="btn btn-link btn-sm text-danger p-0"
+                                                            onClick={() => removerItem(tipo, produto.id)}
+                                                        >
+                                                            Remover
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </li>
-                                ))}
+                                        </li>
+                                    );
+                                })}
                             </ul>
                         </div>
 

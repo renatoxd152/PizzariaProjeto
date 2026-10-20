@@ -14,7 +14,7 @@ export const pizzas: Pizza[] = [
         nome: "Mussarela",
         preco: 44.90,
         tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/mussarela.jpg",
+        imagem: "/imagens/pizzas/mussarela.jpg",
         ingredientes: [
             { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
             { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
@@ -27,7 +27,7 @@ export const pizzas: Pizza[] = [
         nome: "Pepperoni",
         preco: 47.90,
         tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pepperoni.jpg",
+        imagem: "/imagens/pizzas/pepperoni.jpg",
         ingredientes: [
             { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
             { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
@@ -39,7 +39,7 @@ export const pizzas: Pizza[] = [
         nome: "Pepperoni",
         preco: 47.90,
         tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pepperoni.jpg",
+        imagem: "/imagens/pizzas/pepperoni.jpg",
         ingredientes: [
             { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
             { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
@@ -51,7 +51,7 @@ export const pizzas: Pizza[] = [
         nome: "Pepperoni",
         preco: 47.90,
         tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pepperoni.jpg",
+        imagem: "/imagens/pizzas/pepperoni.jpg",
         ingredientes: [
             { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
             { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
@@ -63,7 +63,7 @@ export const pizzas: Pizza[] = [
         nome: "Pepperoni",
         preco: 47.90,
         tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pepperoni.jpg",
+        imagem: "/imagens/pizzas/pepperoni.jpg",
         ingredientes: [
             { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
             { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
@@ -75,7 +75,7 @@ export const pizzas: Pizza[] = [
         nome: "Pepperoni",
         preco: 47.90,
         tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pepperoni.jpg",
+        imagem: "/imagens/pizzas/pepperoni.jpg",
         ingredientes: [
             { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
             { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
@@ -87,7 +87,7 @@ export const pizzas: Pizza[] = [
         nome: "Pepperoni",
         preco: 47.90,
         tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pepperoni.jpg",
+        imagem: "/imagens/pizzas/pepperoni.jpg",
         ingredientes: [
             { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
             { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
@@ -99,7 +99,7 @@ export const pizzas: Pizza[] = [
         nome: "Pepperoni",
         preco: 47.90,
         tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pepperoni.jpg",
+        imagem: "/imagens/pizzas/pepperoni.jpg",
         ingredientes: [
             { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
             { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
@@ -111,7 +111,7 @@ export const pizzas: Pizza[] = [
         nome: "Pepperoni",
         preco: 47.90,
         tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pepperoni.jpg",
+        imagem: "/imagens/pizzas/pepperoni.jpg",
         ingredientes: [
             { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
             { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
@@ -123,7 +123,7 @@ export const pizzas: Pizza[] = [
         nome: "Pepperoni",
         preco: 47.90,
         tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pepperoni.jpg",
+        imagem: "/imagens/pizzas/pepperoni.jpg",
         ingredientes: [
             { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
             { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
@@ -135,7 +135,7 @@ export const pizzas: Pizza[] = [
         nome: "Pepperoni",
         preco: 47.90,
         tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pepperoni.jpg",
+        imagem: "/imagens/pizzas/pepperoni.jpg",
         ingredientes: [
             { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
             { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
@@ -147,7 +147,7 @@ export const pizzas: Pizza[] = [
         nome: "Pepperoni",
         preco: 47.90,
         tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pepperoni.jpg",
+        imagem: "/imagens/pizzas/pepperoni.jpg",
         ingredientes: [
             { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
             { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
@@ -159,7 +159,7 @@ export const pizzas: Pizza[] = [
         nome: "Pepperoni",
         preco: 47.90,
         tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pepperoni.jpg",
+        imagem: "/imagens/pizzas/pepperoni.jpg",
         ingredientes: [
             { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
             { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
@@ -171,7 +171,7 @@ export const pizzas: Pizza[] = [
         nome: "Pepperoni",
         preco: 47.90,
         tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pepperoni.jpg",
+        imagem: "/imagens/pizzas/pepperoni.jpg",
         ingredientes: [
             { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
             { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
@@ -183,7 +183,7 @@ export const pizzas: Pizza[] = [
         nome: "Pepperoni",
         preco: 47.90,
         tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pepperoni.jpg",
+        imagem: "/imagens/pizzas/pepperoni.jpg",
         ingredientes: [
             { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
             { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
@@ -195,7 +195,7 @@ export const pizzas: Pizza[] = [
         nome: "Pepperoni",
         preco: 47.90,
         tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pepperoni.jpg",
+        imagem: "/imagens/pizzas/pepperoni.jpg",
         ingredientes: [
             { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
             { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
@@ -207,7 +207,7 @@ export const pizzas: Pizza[] = [
         nome: "Pepperoni",
         preco: 47.90,
         tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pepperoni.jpg",
+        imagem: "/imagens/pizzas/pepperoni.jpg",
         ingredientes: [
             { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
             { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
@@ -219,7 +219,7 @@ export const pizzas: Pizza[] = [
         nome: "Pepperoni",
         preco: 47.90,
         tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pepperoni.jpg",
+        imagem: "/imagens/pizzas/pepperoni.jpg",
         ingredientes: [
             { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
             { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
@@ -231,7 +231,7 @@ export const pizzas: Pizza[] = [
 export const MenuPizzasCliente: React.FC = () => {
     const [busca, setBusca] = useState("");
     const navigate = useNavigate();
-    const {totalItens, adicionarPizza} = useCarrinho();
+    const {totalItens, adicionar} = useCarrinho();
     const pizzasFiltradas = useMemo(() => {
         const termo = busca.trim().toLowerCase();
         return pizzas.filter(
@@ -250,7 +250,7 @@ export const MenuPizzasCliente: React.FC = () => {
 
     const handleAdicionarPizza =(pizza: Pizza) =>
     {
-        adicionarPizza(pizza);
+        adicionar("pizza",pizza);
     }
 
     return (
