@@ -12,13 +12,8 @@ interface LayoutProps {
     className?: string;
     tituloClassName?: string;
     styleDiv?: React.CSSProperties;
+    itensMenu: ItemMenu[];
 }
-
-const itensMenu: ItemMenu[] = [
-    { to: "/", label: "Início" },
-    { to: "/bebidas", label: "Bebidas" },
-    { to: "/pizzas", label: "Pizzas Favoritas" },
-];
 
 export const MenuInicial: React.FC<LayoutProps> = ({
                                                        titulo,
@@ -28,6 +23,7 @@ export const MenuInicial: React.FC<LayoutProps> = ({
                                                        className = "",
                                                        tituloClassName = "",
                                                        styleDiv,
+                                                       itensMenu
                                                    }) => {
     const navigate = useNavigate();
     const sair = () => navigate("/login");

@@ -5,6 +5,7 @@ import MenuPizzasCliente from "../pages/menu/index.tsx";
 import CarrinhoCliente from "../pages/carrinho/index.tsx";
 import {MenuBebidas} from "../components/layouts/Menu/bebidas/MenuBebidas.tsx";
 import {MenuEditPizza} from "../components/layouts/Menu/pizza/atualizar/EditarPizza.tsx";
+import MenuPizzasAdmin from "../pages/menuAdmin/index.tsx"
 export const AppRoutes = () => {
     return (
         <Routes>
@@ -15,6 +16,7 @@ export const AppRoutes = () => {
             <Route path="/carrinho" element={<CarrinhoCliente/>}/>
             <Route path="/bebidas" element={<MenuBebidas/>}/>
             <Route path="/editar/pizza/:id" element={<MenuEditPizza/>}/>
+            <Route path="/cadastro/pizzas" element={<MenuPizzasAdmin/>}/>
         </Routes>
     );
 };

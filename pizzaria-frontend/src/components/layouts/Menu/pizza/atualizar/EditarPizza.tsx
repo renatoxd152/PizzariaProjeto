@@ -5,6 +5,7 @@ import {MenuInicial} from "../../LayoutMenu.tsx";
 import {useCarrinho} from "../../../../../contexts/CarrinhoContext.tsx";
 import {type Pizza, TamanhoPizza} from "../../../../../models/Pizza/Pizza.ts";
 import {UnidadeMedida} from "../../../../../models/Pizza/IngredientePizza.ts";
+import {itensMenu} from "../../../../config/MenuCliente.ts";
 export const pizzas: Pizza[] = [
     {
         id: 1,
@@ -240,7 +241,7 @@ export const MenuEditPizza: React.FC = () => {
 
     if (!pizza) {
         return (
-            <MenuInicial titulo="Pizza não encontrada" subtitulo="Não encontramos essa pizza no cardápio.">
+            <MenuInicial titulo="Pizza não encontrada" subtitulo="Não encontramos essa pizza no cardápio." itensMenu={itensMenu}>
                 <button className="btn btn-success" onClick={() => navigate("/pizzas")}>
                     Voltar ao cardápio
                 </button>
@@ -274,6 +275,7 @@ export const MenuEditPizza: React.FC = () => {
         <MenuInicial
             titulo="Personalize a pizza da sua forma!"
             subtitulo="Deixe sua pizza mais especial e do seu jeito."
+            itensMenu={itensMenu}
         >
             <button className="btn btn-link px-0 mb-3" onClick={() => navigate(-1)}>
                 <i className="bi bi-arrow-left me-1"></i>Voltar

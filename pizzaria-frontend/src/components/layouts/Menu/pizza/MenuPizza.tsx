@@ -7,6 +7,7 @@ import type {Pizza} from "../../../../models/Pizza/Pizza.ts";
 import {TamanhoPizza} from "../../../../models/Pizza/Pizza.ts";
 import {UnidadeMedida} from "../../../../models/Pizza/IngredientePizza.ts";
 import {useCarrinho} from "../../../../contexts/CarrinhoContext.tsx";
+import {itensMenu} from "../../../config/MenuCliente.ts";
 
 export const pizzas: Pizza[] = [
     {
@@ -268,6 +269,7 @@ export const MenuPizzasCliente: React.FC = () => {
                     )}
                 </button>
             }
+            itensMenu={itensMenu}
         >
             <div className="d-flex flex-wrap gap-3 align-items-center mb-4">
                 <input

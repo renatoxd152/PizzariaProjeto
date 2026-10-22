@@ -2,6 +2,7 @@ import * as React from "react";
 import {useNavigate} from "react-router";
 import {MenuInicial} from "../layouts/Menu/LayoutMenu.tsx";
 import {useCarrinho} from "../../contexts/CarrinhoContext.tsx";
+import {itensMenu} from "../config/MenuCliente.ts";
 
 const formatarPreco = (valor: number) =>
     valor.toLocaleString("pt-BR", {style: "currency", currency: "BRL"});
@@ -19,7 +20,7 @@ export const CarrinhoCliente: React.FC = () =>
             titulo={<><i className="bi bi-cart3 me-2"></i>Seu pedido</>}
             subtitulo={`${totalItens} ${totalItens === 1 ? "item" : "itens"} no carrinho. Revise antes de finalizar.`}
             tituloClassName="titulo-compacto"
-        >
+            itensMenu={itensMenu}>
             {itens.length === 0 ? (
                 <div className="text-center text-muted py-5">
                     <p className="fs-5 mb-3">Seu carrinho está vazio</p>

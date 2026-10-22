@@ -1,0 +1,379 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Young+Serif&display=swap');
+
+/* ------------------------------------------------------------------ */
+/* Tokens                                                              */
+/* ------------------------------------------------------------------ */
+.pz {
+    --pz-tinta: #1c2a21;
+    --pz-tinta-suave: #5b675e;
+    --pz-papel: #fdfdfb;
+    --pz-linha: #d5dad1;
+    --pz-linha-forte: #aab3a6;
+    --pz-tomate: #c23b2a;
+    --pz-tomate-escuro: #9f2e20;
+    --pz-manjericao: #2e6b43;
+    --pz-crosta: #d9a652;
+
+    --pz-serifa: 'Young Serif', Georgia, serif;
+    --pz-sans: 'Instrument Sans', system-ui, sans-serif;
+
+    font-family: var(--pz-sans);
+    color: var(--pz-tinta);
+}
+
+/* ------------------------------------------------------------------ */
+/* Folha (a "página" do cardápio)                                      */
+/* ------------------------------------------------------------------ */
+.pz-folha {
+    max-width: 1080px;
+    margin: 0 auto;
+    background: var(--pz-papel);
+    border: 1px solid var(--pz-linha);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+/* Faixa xadrez de toalha de mesa: único elemento decorativo */
+.pz-faixa {
+    height: 14px;
+    background-color: #fff;
+    background-image:
+            linear-gradient(90deg, rgba(194, 59, 42, .55) 50%, transparent 50%),
+            linear-gradient(rgba(194, 59, 42, .55) 50%, transparent 50%);
+    background-size: 14px 14px;
+}
+
+.pz-pagina {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 290px;
+    padding: 2.5rem 0 2.5rem 2.5rem;
+}
+.pz-principal { padding-right: 2.5rem; min-width: 0; }
+
+/* ------------------------------------------------------------------ */
+/* Texto                                                               */
+/* ------------------------------------------------------------------ */
+.pz-titulo-secao {
+    font-family: var(--pz-serifa);
+    font-weight: 400;
+    font-size: 1.45rem;
+    line-height: 1.2;
+    margin: 0;
+    color: var(--pz-tinta);
+}
+.pz-subtitulo-secao {
+    margin: .25rem 0 0;
+    font-size: .9rem;
+    color: var(--pz-tinta-suave);
+}
+.pz-rotulo {
+    display: block;
+    margin-bottom: .1rem;
+    font-size: .82rem;
+    font-weight: 500;
+    color: var(--pz-tinta-suave);
+}
+
+/* ------------------------------------------------------------------ */
+/* Campos: só com sublinhado, sem caixas                               */
+/* ------------------------------------------------------------------ */
+.pz .form-control,
+.pz .form-select {
+    border: 0;
+    border-bottom: 1px solid var(--pz-linha-forte);
+    border-radius: 0;
+    background-color: transparent;
+    box-shadow: none;
+    padding: .45rem .1rem;
+    color: var(--pz-tinta);
+    font-family: var(--pz-sans);
+    transition: border-color .15s, box-shadow .15s, background-color .15s;
+}
+.pz .form-select {
+    padding-right: 1.75rem;
+    background-position: right .1rem center;
+}
+.pz .form-control::placeholder { color: #a3ab9f; }
+.pz .form-control:hover,
+.pz .form-select:hover { border-bottom-color: var(--pz-tinta); }
+.pz .form-control:focus,
+.pz .form-select:focus {
+    background-color: rgba(46, 107, 67, .06);
+    border-bottom-color: var(--pz-manjericao);
+    box-shadow: 0 1px 0 0 var(--pz-manjericao);
+    color: var(--pz-tinta);
+}
+
+/* ------------------------------------------------------------------ */
+/* Linha do prato: nome ........ preço                                 */
+/* ------------------------------------------------------------------ */
+.pz-linha-prato {
+    display: flex;
+    align-items: flex-end;
+    gap: .75rem;
+}
+.pz-campo { display: block; margin: 0; }
+.pz-campo-nome { flex: 2 1 0; min-width: 0; }
+.pz-campo-preco { flex: 0 0 9.5rem; }
+
+.pz .pz-campo-nome .form-control {
+    font-family: var(--pz-serifa);
+    font-size: 1.9rem;
+    line-height: 1.2;
+    padding-bottom: .3rem;
+}
+.pz .pz-campo-preco .form-control {
+    font-family: var(--pz-serifa);
+    font-size: 1.5rem;
+    line-height: 1.3;
+    padding-left: 2.2rem;
+}
+
+.pz-pontilhado {
+    flex: 1 1 2rem;
+    min-width: 1.5rem;
+    margin-bottom: .75rem;
+    border-bottom: 3px dotted rgba(28, 42, 33, .35);
+}
+
+.pz-preco { position: relative; }
+.pz-preco::before {
+    content: "R$";
+    position: absolute;
+    left: .1rem;
+    bottom: .6rem;
+    font-size: .9rem;
+    font-weight: 600;
+    color: var(--pz-tinta-suave);
+    pointer-events: none;
+}
+
+.pz-campo-tamanho { max-width: 15rem; margin-top: 1.5rem; }
+
+/* ------------------------------------------------------------------ */
+/* Ingredientes: lista em linhas                                       */
+/* ------------------------------------------------------------------ */
+.pz-ingredientes { margin-top: 2.75rem; }
+
+.pz-cabecalho-ingredientes {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
+    padding-bottom: .7rem;
+    border-bottom: 2px solid var(--pz-tinta);
+}
+
+.pz-ingrediente {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 6.5rem 9.5rem auto;
+    gap: .5rem 1.25rem;
+    align-items: end;
+    padding: 1rem 0;
+    border-bottom: 1px dotted var(--pz-linha-forte);
+}
+.pz-celula { display: block; margin: 0; }
+.pz-celula-acao { display: flex; justify-content: flex-end; }
+
+/* Rótulos só na primeira linha (continuam lidos por leitores de tela) */
+.pz-lista .pz-ingrediente:not(:first-child) .pz-rotulo {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+/* ------------------------------------------------------------------ */
+/* Botões                                                              */
+/* ------------------------------------------------------------------ */
+.pz .btn {
+    font-family: var(--pz-sans);
+    font-weight: 600;
+    transition: background-color .15s, color .15s, border-color .15s, transform .1s;
+}
+.pz .btn:focus-visible {
+    outline: 3px solid rgba(46, 107, 67, .45);
+    outline-offset: 3px;
+    box-shadow: none;
+}
+
+.pz .btn-primary {
+    background: var(--pz-tomate);
+    border: 0;
+    border-radius: 999px;
+    padding: .8rem 2.25rem;
+    color: #fff;
+}
+.pz .btn-primary:hover,
+.pz .btn-primary:focus { background: var(--pz-tomate-escuro); color: #fff; }
+.pz .btn-primary:active { transform: translateY(1px); }
+
+.pz .btn-outline-primary {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    padding: .25rem 0;
+    color: var(--pz-manjericao);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    white-space: nowrap;
+}
+.pz .btn-outline-primary:hover,
+.pz .btn-outline-primary:focus {
+    background: transparent;
+    color: var(--pz-tinta);
+}
+
+.pz .btn-outline-danger {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    padding: .45rem 0;
+    font-size: .88rem;
+    font-weight: 500;
+    color: var(--pz-tomate);
+    width: auto;
+}
+.pz .btn-outline-danger:hover,
+.pz .btn-outline-danger:focus {
+    background: transparent;
+    color: var(--pz-tomate-escuro);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.pz .btn-outline-danger:disabled {
+    background: transparent;
+    color: var(--pz-tinta-suave);
+    opacity: .35;
+}
+
+/* ------------------------------------------------------------------ */
+/* Foto em círculo                                                     */
+/* ------------------------------------------------------------------ */
+.pz-lateral {
+    align-self: start;
+    position: sticky;
+    top: 1rem;
+    padding: 0 2.5rem 0 2.5rem;
+    border-left: 1px solid var(--pz-linha);
+}
+
+.pz-upload { display: block; margin: 1.5rem 0 0; cursor: pointer; }
+.pz-upload input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    overflow: hidden;
+}
+
+.pz-moldura {
+    aspect-ratio: 1;
+    width: 100%;
+    border-radius: 50%;
+    border: 2px dashed var(--pz-linha-forte);
+    background: #f1f3ee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    transition: border-color .15s, background-color .15s;
+}
+.pz-upload:hover .pz-moldura { border-color: var(--pz-manjericao); background: #e9eee8; }
+.pz-upload input:focus-visible + .pz-moldura {
+    outline: 3px solid rgba(46, 107, 67, .45);
+    outline-offset: 3px;
+}
+
+/* Com imagem: borda dourada, como a massa da pizza */
+.pz-moldura.com-imagem {
+    border: 12px solid var(--pz-crosta);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .12);
+    background: var(--pz-crosta);
+}
+.pz-moldura img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.pz-moldura-texto {
+    padding: 1.25rem;
+    font-family: var(--pz-serifa);
+    font-size: 1.2rem;
+    line-height: 1.25;
+    color: var(--pz-manjericao);
+}
+.pz-moldura-texto small {
+    display: block;
+    margin-top: .35rem;
+    font-family: var(--pz-sans);
+    font-size: .8rem;
+    color: var(--pz-tinta-suave);
+}
+.pz-trocar {
+    margin-top: .9rem;
+    text-align: center;
+    font-size: .85rem;
+    color: var(--pz-tinta-suave);
+}
+
+/* ------------------------------------------------------------------ */
+/* Rodapé com o botão de envio                                         */
+/* ------------------------------------------------------------------ */
+.pz-enviar {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1.25rem 2.5rem 1.75rem;
+    border-top: 1px solid var(--pz-linha);
+}
+
+/* ------------------------------------------------------------------ */
+/* Responsivo                                                          */
+/* ------------------------------------------------------------------ */
+@media (max-width: 991.98px) {
+    .pz-pagina {
+        grid-template-columns: minmax(0, 1fr);
+        padding: 2rem 1.5rem;
+    }
+    .pz-principal { padding-right: 0; }
+    .pz-lateral {
+        position: static;
+        margin-top: 2.5rem;
+        padding: 2rem 0 0;
+        border-left: 0;
+        border-top: 1px solid var(--pz-linha);
+    }
+    .pz-upload { max-width: 260px; }
+    .pz-enviar { padding: 1.25rem 1.5rem 1.5rem; }
+}
+
+@media (max-width: 575.98px) {
+    .pz-linha-prato { flex-wrap: wrap; }
+    .pz-campo-nome { flex: 1 1 100%; }
+    .pz-pontilhado { display: none; }
+    .pz-campo-preco { flex: 1 1 100%; }
+    .pz-campo-tamanho { max-width: none; }
+    .pz-cabecalho-ingredientes { flex-direction: column; align-items: flex-start; }
+
+    .pz-ingrediente { grid-template-columns: 1fr 1fr; }
+    .pz-ingrediente .pz-celula:first-child { grid-column: 1 / -1; }
+    .pz-celula-acao { grid-column: 1 / -1; }
+    .pz-lista .pz-ingrediente:not(:first-child) .pz-rotulo {
+        position: static;
+        width: auto;
+        height: auto;
+        clip: auto;
+        overflow: visible;
+    }
+    .pz-enviar .btn { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pz * { transition: none !important; }
+}

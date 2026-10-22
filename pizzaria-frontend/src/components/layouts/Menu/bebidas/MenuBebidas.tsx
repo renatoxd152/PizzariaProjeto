@@ -5,6 +5,7 @@ import {useNavigate} from "react-router";
 import {useCarrinho} from "../../../../contexts/CarrinhoContext.tsx";
 import type {Bebida} from "../../../../models/Bebida.ts";
 import {BebidaItem} from "../../../bebidas/BebidaItem.tsx";
+import {itensMenu} from "../../../config/MenuCliente.ts";
 
 const bebidas: Bebida[] = [ {
     id: 1,
@@ -69,6 +70,7 @@ export const MenuBebidas: React.FC = () =>
                     )}
                 </button>
             }
+            itensMenu={itensMenu}
         >
             <div className="d-flex flex-wrap gap-3 align-items-center mb-4">
                 <input

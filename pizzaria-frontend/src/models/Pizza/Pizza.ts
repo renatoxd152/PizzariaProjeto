@@ -19,3 +19,11 @@ export interface Pizza
     imagem: string;
     observacao?:string;
 }
+
+export interface PizzaRequest {
+    nome: string;
+    preco: number;
+    tamanhoPizza: TamanhoPizza;
+    ingredientes: Array<IngredientePizza>;
+    observacao?: string;
+}
