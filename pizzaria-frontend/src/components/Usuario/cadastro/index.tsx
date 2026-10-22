@@ -3,13 +3,23 @@ import {useState} from "react";
 import {LayoutTelaInicial} from "../../layouts/TelaInicial";
 import {CadastroUsuarioForm} from "./form.tsx";
 import type {Usuario} from "../../../models/Usuario/Usuario.ts";
+import {useUsuarioService} from "../../../services/usuario.service.ts";
 
 export const CadastroUsuario: React.FC = () => {
     const [sucesso, setSucesso] = useState<string | null>(null);
+    const [erro, setErro] = useState<string | null>(null);
+    const service = useUsuarioService();
 
     const handleSubmit = async (usuario: Usuario) => {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // simula a API
-        setSucesso(`Bem-vindo(a), ${usuario.nome}! Cadastro realizado.`);
+        try {
+            setErro(null);
+            await service.salvar(usuario);
+            setSucesso(`Bem-vindo(a), ${usuario.nome}! Cadastro realizado.`);
+        } catch (e) {
+            console.error(e);
+            setErro("Não foi possível realizar o cadastro. Tente novamente.");
+            throw e;
+        }
     };
 
     return (<LayoutTelaInicial
@@ -37,6 +47,12 @@ export const CadastroUsuario: React.FC = () => {
                                 aria-label="Fechar"
                                 onClick={() => setSucesso(null)}
                             />
+                        </div>
+                    )}
+
+                    {erro && (
+                        <div className="alert alert-danger" role="alert">
+                            {erro}
                         </div>
                     )}
 
