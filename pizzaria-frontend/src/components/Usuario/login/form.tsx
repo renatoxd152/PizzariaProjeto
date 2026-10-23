@@ -4,6 +4,7 @@ import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import type {UsuarioLogin} from "../../../models/Usuario/UsuarioLogin.ts";
+import {Link} from "react-router";
 
 interface UsuarioFormProps {
     onSubmit: (usuario: UsuarioLogin) => void | Promise<void>;
@@ -82,6 +83,13 @@ export const LoginUsuarioForm: React.FC<UsuarioFormProps> = ({onSubmit, usuario}
             <button type="submit" className="btn btn-primary w-100 mt-2" disabled={isSubmitting}>
                 {isSubmitting ? "Entrando..." : "Fazer Login"}
             </button>
+
+            <p className="text-center text-muted mt-3 mb-0">
+                Não tem conta?{" "}
+                <Link to="/usuarios/cadastro" className="fw-semibold">
+                    Cadastre-se
+                </Link>
+            </p>
         </form>
     );
 };

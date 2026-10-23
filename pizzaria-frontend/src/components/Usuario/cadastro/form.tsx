@@ -3,6 +3,7 @@ import * as React from "react";
 import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
+import {Link} from "react-router";
 
 interface UsuarioFormProps {
     onSubmit: (usuario: Usuario) => void | Promise<void>;
@@ -135,6 +136,13 @@ export const CadastroUsuarioForm: React.FC<UsuarioFormProps> = ({onSubmit, usuar
             <button type="submit" className="btn btn-primary w-100 mt-2" disabled={isSubmitting}>
                 {isSubmitting ? "Cadastrando..." : "Cadastrar"}
             </button>
+
+            <p className="text-center text-muted mt-3 mb-0">
+                Já tem uma conta? Faça{" "}
+                <Link to="/login" className="fw-semibold">
+                    Login
+                </Link>
+            </p>
         </form>
     );
 };
