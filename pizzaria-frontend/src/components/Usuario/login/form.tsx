@@ -4,7 +4,6 @@ import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import type {UsuarioLogin} from "../../../models/Usuario/UsuarioLogin.ts";
-import {useNavigate} from "react-router";
 
 interface UsuarioFormProps {
     onSubmit: (usuario: UsuarioLogin) => void | Promise<void>;
@@ -47,11 +46,9 @@ export const LoginUsuarioForm: React.FC<UsuarioFormProps> = ({onSubmit, usuario}
             senha: ""
         },
     });
-    const navigate = useNavigate();
 
     const enviar = async (dados: UsuarioFormData) => {
         await onSubmit(dados);
-        navigate("/pizzas")
         reset();
     };
 

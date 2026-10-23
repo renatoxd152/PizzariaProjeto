@@ -1,5 +1,6 @@
 import { httpClientUsuario } from "../http";
 import type {Usuario} from "../models/Usuario/Usuario.ts";
+import type {TokenResponse, UsuarioLogin} from "../models/Usuario/UsuarioLogin.ts";
 
 const resourceURL = "/usuarios";
 
@@ -9,5 +10,11 @@ export const useUsuarioService = () => {
         return response.data;
     };
 
-    return { salvar };
+    const login = async (usuario: UsuarioLogin): Promise<TokenResponse> =>
+    {
+        const response = await httpClientUsuario.post<TokenResponse>( `${resourceURL}/login`,usuario);
+        return response.data;
+    }
+
+    return { salvar,login };
 };
