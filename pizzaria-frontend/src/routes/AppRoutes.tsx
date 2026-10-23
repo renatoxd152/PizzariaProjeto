@@ -20,7 +20,7 @@ export const AppRoutes = () => {
                 <Route path="/bebidas" element={<MenuBebidas />} />
             </Route>
 
-            <Route element={<RotaProtegida roleNecessaria="ROLE_ADMIN" />}>
+            <Route element={<RotaProtegida roleNecessaria="ROLE_ADMIN"/>}>
                 <Route path="/editar/pizza/:id" element={<MenuEditPizza />} />
                 <Route path="/cadastro/pizzas" element={<MenuPizzasAdmin />} />
             </Route>

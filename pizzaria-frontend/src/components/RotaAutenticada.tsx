@@ -1,5 +1,5 @@
 import {Navigate, Outlet} from "react-router";
-import {estaLogado, getRoles} from "../auth/auth";
+import {estaLogado, getRoles, rotaInicialPorRole} from "../auth/auth";
 
 interface RotaProtegidaProps {
     roleNecessaria?: string;
@@ -10,8 +10,10 @@ export const RotaProtegida = ({roleNecessaria}: RotaProtegidaProps) => {
         return <Navigate to="/login" replace />;
     }
 
-    if (roleNecessaria && !getRoles().includes(roleNecessaria)) {
-        return <Navigate to="cadastro/pizzas" replace />;
+    const roles = getRoles();
+
+    if (roleNecessaria && !roles.includes(roleNecessaria)) {
+        return <Navigate to={rotaInicialPorRole(roles)} replace />;
     }
 
     return <Outlet />;
