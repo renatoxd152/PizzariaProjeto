@@ -7,6 +7,7 @@ import {MenuBebidas} from "../components/layouts/Menu/bebidas/MenuBebidas.tsx";
 import {MenuEditPizza} from "../components/layouts/Menu/pizza/atualizar/EditarPizza.tsx";
 import MenuPizzasAdmin from "../pages/menuAdmin/index.tsx"
 import {RotaProtegida} from "../components/RotaAutenticada.tsx";
+import {MenuListagemPizzasAdmin} from "../components/layouts/MenuAdmin/listagemPizzas";
 export const AppRoutes = () => {
     return (
         <Routes>
@@ -23,6 +24,7 @@ export const AppRoutes = () => {
             <Route element={<RotaProtegida roleNecessaria="ROLE_ADMIN"/>}>
                 <Route path="/editar/pizza/:id" element={<MenuEditPizza />} />
                 <Route path="/cadastro/pizzas" element={<MenuPizzasAdmin />} />
+                <Route path="/listar/pizzas" element={<MenuListagemPizzasAdmin />} />
             </Route>
         </Routes>
     );

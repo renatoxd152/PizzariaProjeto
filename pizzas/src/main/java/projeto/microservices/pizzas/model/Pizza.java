@@ -22,4 +22,5 @@ public class Pizza implements Serializable {
     private BigDecimal preco;
     private TamanhoPizza tamanho;
     private List<IngredientePizza> itens;
+    private String imagem;
 }

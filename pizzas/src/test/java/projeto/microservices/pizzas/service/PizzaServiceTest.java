@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import projeto.microservices.pizzas.model.IngredientePizza;
 import projeto.microservices.pizzas.model.Pizza;
@@ -17,14 +18,15 @@ import projeto.microservices.pizzas.model.enums.UnidadeMedida;
 import projeto.microservices.pizzas.repository.PizzaRepository;
 
 import javax.swing.text.html.Option;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -38,6 +40,8 @@ public class PizzaServiceTest {
     private Pizza pizza;
     private Pizza pizzaAtualizada;
     private IngredientePizza ingredientePizza4;
+    @Mock
+    private MultipartFile imagem;
     @BeforeEach
     void setup()
     {
@@ -55,12 +59,12 @@ public class PizzaServiceTest {
         ingredientePizza1.setId(UUID.randomUUID().toString());
         ingredientePizza1.setNomeIngrediente("Mussarela");
         ingredientePizza1.setQuantidade(BigDecimal.valueOf(250));
-        ingredientePizza1.setUnidadeMedida(UnidadeMedida.GRAMA);
+        ingredientePizza1.setUnidadeMedida(UnidadeMedida.GRAMAS);
 
         ingredientePizza2.setId(UUID.randomUUID().toString());
         ingredientePizza2.setNomeIngrediente("Frango");
         ingredientePizza2.setQuantidade(BigDecimal.valueOf(1000));
-        ingredientePizza2.setUnidadeMedida(UnidadeMedida.GRAMA);
+        ingredientePizza2.setUnidadeMedida(UnidadeMedida.GRAMAS);
         pizza.setItens(new ArrayList<>(List.of(ingredientePizza1,ingredientePizza2)));
 
         pizzaAtualizada = new Pizza();
@@ -71,11 +75,11 @@ public class PizzaServiceTest {
 
         ingredientePizza3.setNomeIngrediente("Mussarela");
         ingredientePizza3.setQuantidade(BigDecimal.valueOf(250));
-        ingredientePizza3.setUnidadeMedida(UnidadeMedida.GRAMA);
+        ingredientePizza3.setUnidadeMedida(UnidadeMedida.GRAMAS);
 
         ingredientePizza4.setNomeIngrediente("Frango");
         ingredientePizza4.setQuantidade(BigDecimal.valueOf(1000));
-        ingredientePizza4.setUnidadeMedida(UnidadeMedida.GRAMA);
+        ingredientePizza4.setUnidadeMedida(UnidadeMedida.GRAMAS);
         pizzaAtualizada.setItens(List.of(ingredientePizza3,ingredientePizza4));
     }
 
@@ -84,12 +88,23 @@ public class PizzaServiceTest {
     {
         @Test
         @DisplayName("Deve adicionar uma pizza")
-        public void deveAdicionarUmaPizza()
+        public void deveAdicionarUmaPizza() throws IOException
         {
-            when(pizzaRepository.save(pizza)).thenReturn(pizza);
-            Pizza resultado = pizzaService.criarPizza(pizza);
+            when(imagem.getOriginalFilename()).thenReturn("calabresa.jpg");
 
-            assertEquals(pizza,resultado);
+            when(imagem.getInputStream()).thenReturn(
+                    new ByteArrayInputStream("imagem-teste".getBytes())
+            );
+
+            when(pizzaRepository.save(pizza)).thenReturn(pizza);
+
+            Pizza resultado = pizzaService.criarPizza(pizza, imagem);
+
+            assertEquals(pizza, resultado);
+            assertNotNull(resultado.getImagem());
+
+            verify(pizzaRepository).save(pizza);
+            verify(imagem).getInputStream();
         }
     }
 

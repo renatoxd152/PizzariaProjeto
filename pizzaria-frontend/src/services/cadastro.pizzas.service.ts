@@ -1,5 +1,6 @@
 import type { Pizza, PizzaRequest } from "../models/Pizza/Pizza.ts";
 import { httpClient } from "../http";
+import type {AxiosResponse} from "axios";
 
 const resourceURL = "/pizzas";
 
@@ -17,5 +18,11 @@ export const useCadastroPizzaService = () => {
         return response.data;
     };
 
-    return { salvar };
+    const listar = async ():Promise<Pizza[]> =>
+    {
+        const response:AxiosResponse<Pizza[]> = await httpClient.get(resourceURL);
+        return response.data;
+    }
+
+    return { salvar ,listar};
 };

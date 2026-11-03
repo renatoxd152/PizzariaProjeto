@@ -43,6 +43,7 @@ public class SecurityConfig {
                         .requestMatchers("/actuator/health").permitAll()
                         .requestMatchers(HttpMethod.POST, "/pizzas").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/pizzas/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/pizzas/**").hasRole("ADMIN")
                         .requestMatchers(
                                 "/swagger-ui/**",

@@ -4,16 +4,19 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import projeto.microservices.pizzas.controller.dto.PizzaDTO;
 import projeto.microservices.pizzas.controller.mapper.PizzaMapper;
 import projeto.microservices.pizzas.model.Pizza;
 import projeto.microservices.pizzas.service.PizzaService;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -29,11 +32,12 @@ public class PizzaController {
             @ApiResponse(responseCode = "200", description = "Pizza criada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos")
     })
-    @PostMapping
-    public ResponseEntity<Pizza> criarPizza(@RequestBody PizzaDTO pizzaDTO)
-    {
-        Pizza pizza = pizzaService.criarPizza(pizzaMapper.map(pizzaDTO));
-        return ResponseEntity.ok(pizza);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Pizza> criarPizza(
+            @RequestPart("pizza") PizzaDTO pizzaDTO, @RequestPart("imagem") MultipartFile imagem
+    ) throws IOException {
+        Pizza pizza = pizzaMapper.map(pizzaDTO);
+        return ResponseEntity.ok(pizzaService.criarPizza(pizza, imagem));
     }
 
     @Operation(summary = "Listar todas as pizzas")

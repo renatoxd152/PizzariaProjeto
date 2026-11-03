@@ -1,0 +1,114 @@
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 24px;
+    padding: 24px 0;
+    cursor: pointer;
+}
+
+.aviso {
+    padding: 24px 0;
+    color: #6b7280;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+}
+
+.imagemWrapper {
+    position: relative;
+    height: 190px;
+    background: #f3f4f6;
+}
+
+.imagem {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.tamanho {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #198754;
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 5px 12px;
+    border-radius: 999px;
+}
+
+.conteudo {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 18px;
+}
+
+.nome {
+    margin: 0 0 14px;
+    font-size: 1.2rem;
+    color: #1f2937;
+}
+
+.subtitulo {
+    margin: 0 0 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #9ca3af;
+}
+
+.ingredientes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+    font-size: 0.92rem;
+    color: #374151;
+}
+
+.ingredientes li {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 7px 0;
+    border-bottom: 1px dashed #e5e7eb;
+}
+
+.ingredientes li:last-child {
+    border-bottom: none;
+}
+
+.quantidade {
+    color: #6b7280;
+    white-space: nowrap;
+}
+
+.rodape {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.preco {
+    font-size: 1.4rem;
+    color: #198754;
+}

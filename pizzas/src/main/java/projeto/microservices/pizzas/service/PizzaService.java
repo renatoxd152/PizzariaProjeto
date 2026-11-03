@@ -1,22 +1,49 @@
 package projeto.microservices.pizzas.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import projeto.microservices.pizzas.controller.dto.PizzaDTO;
 import projeto.microservices.pizzas.model.IngredientePizza;
 import projeto.microservices.pizzas.model.Pizza;
 import projeto.microservices.pizzas.repository.PizzaRepository;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class PizzaService {
     private final PizzaRepository pizzaRepository;
-    public Pizza criarPizza(Pizza pizza) {
+
+    public Pizza criarPizza(Pizza pizza, MultipartFile imagem) throws IOException {
+        pizza.setImagem(salvarImagem(imagem));
         return pizzaRepository.save(pizza);
+    }
+
+    private String salvarImagem(MultipartFile imagem) throws IOException {
+
+        String nomeArquivo = UUID.randomUUID() + "_" + imagem.getOriginalFilename();
+
+        Path caminho = Paths.get("uploads/pizzas", nomeArquivo);
+
+        Files.createDirectories(caminho.getParent());
+
+        Files.copy(
+                imagem.getInputStream(),
+                caminho,
+                StandardCopyOption.REPLACE_EXISTING
+        );
+
+        return "/uploads/pizzas/" + nomeArquivo;
     }
 
     public List<Pizza> listarPizzas() {

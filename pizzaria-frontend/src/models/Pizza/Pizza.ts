@@ -15,7 +15,7 @@ export interface Pizza
     nome:string;
     preco:number;
     tamanhoPizza:TamanhoPizza;
-    ingredientes: Array<IngredientePizza>;
+    itens: IngredientePizza[];
     imagem: string;
     observacao?:string;
 }
@@ -23,7 +23,7 @@ export interface Pizza
 export interface PizzaRequest {
     nome: string;
     preco: number;
-    tamanhoPizza: TamanhoPizza;
-    ingredientes: Array<IngredientePizza>;
+    tamanho: TamanhoPizza;
+    itens: Array<IngredientePizza>;
     observacao?: string;
 }

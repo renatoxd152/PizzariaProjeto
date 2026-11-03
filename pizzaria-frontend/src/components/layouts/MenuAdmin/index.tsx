@@ -93,8 +93,8 @@ export const MenuPizzasAdmin: React.FC = () => {
         return {
             nome: form.nome,
             preco: form.preco,
-            tamanhoPizza: form.tamanho as TamanhoPizza,
-            ingredientes: form.itens.map((item) => ({
+            tamanho: form.tamanho as TamanhoPizza,
+            itens: form.itens.map((item) => ({
                 nomeIngrediente: item.nomeIngrediente.trim(),
                 quantidade: item.quantidade,
                 unidadeMedida: item.unidadeMedida as UnidadeMedida
@@ -279,10 +279,10 @@ export const MenuPizzasAdmin: React.FC = () => {
                                                         }
                                                         required
                                                     >
-                                                        <option value="GRAMAS">Gramas</option>
+                                                        <option value="GRAMA">Gramas</option>
                                                         <option value="KG">Quilogramas</option>
-                                                        <option value="ML">Mililitros</option>
-                                                        <option value="L">Litros</option>
+                                                        <option value="MILILITRO">Mililitros</option>
+                                                        <option value="LITRO">Litros</option>
                                                         <option value="UNIDADE">Unidade</option>
                                                     </select>
                                                 </label>
@@ -305,7 +305,6 @@ export const MenuPizzasAdmin: React.FC = () => {
                                 </section>
                             </div>
 
-                            {/* Coluna lateral: foto */}
                             <aside className="pz-lateral">
                                 <h4 className="pz-titulo-secao">Foto da pizza</h4>
                                 <p className="pz-subtitulo-secao">PNG, JPG ou WebP.</p>

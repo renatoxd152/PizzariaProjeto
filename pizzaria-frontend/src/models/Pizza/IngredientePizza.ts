@@ -2,7 +2,9 @@ export enum UnidadeMedida {
     GRAMA= "GRAMA",
     MILILITRO = "MILILITRO",
     UNIDADE = "UNIDADE",
-    FATIA = "FATIA"
+    FATIA = "FATIA",
+    LITRO = "LITRO",
+    KG = "KG"
 }
 export interface IngredientePizza
 {
