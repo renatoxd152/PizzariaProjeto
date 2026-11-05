@@ -19,6 +19,7 @@ export const AppRoutes = () => {
                 <Route path="/pizzas" element={<MenuPizzasCliente />} />
                 <Route path="/carrinho" element={<CarrinhoCliente />} />
                 <Route path="/bebidas" element={<MenuBebidas />} />
+                <Route path="/editar/pizza/:id" element={<MenuEditPizza />} />
             </Route>
 
             <Route element={<RotaProtegida roleNecessaria="ROLE_ADMIN"/>}>

@@ -24,5 +24,12 @@ export const useCadastroPizzaService = () => {
         return response.data;
     }
 
-    return { salvar ,listar};
+    const listarPizza = async (id:string):Promise<Pizza> =>
+    {
+        const url:string = `${resourceURL}/${id}`;
+        const response:AxiosResponse<Pizza> = await httpClient.get(url);
+        return response.data;
+    }
+
+    return { salvar ,listar, listarPizza};
 };

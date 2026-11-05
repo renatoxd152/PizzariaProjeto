@@ -11,10 +11,9 @@ export const CarrinhoCliente: React.FC = () =>
 {
     const navigate = useNavigate();
     const {itens, totalItens, valorTotal: subtotal, alterarQuantidade, removerItem, limparCarrinho} = useCarrinho();
-
     const taxaEntrega = itens.length > 0 ? 5 : 0;
     const total = subtotal + taxaEntrega;
-
+    const url = import.meta.env.VITE_SERVICO_PIZZA_URL;
     return(
         <MenuInicial
             titulo={<><i className="bi bi-cart3 me-2"></i>Seu pedido</>}
@@ -34,12 +33,13 @@ export const CarrinhoCliente: React.FC = () =>
                         <div className="card">
                             <ul className="list-group list-group-flush">
                                 {itens.map((item) => {
+                                    console.log(item)
                                     const {tipo, produto, quantidade} = item;
                                     return (
                                         <li key={`${tipo}-${produto.id}`} className="list-group-item">
                                             <div className="d-flex gap-3 align-items-center">
                                                 <img
-                                                    src={produto.imagem}
+                                                    src={`${url}${produto.imagem}`}
                                                     alt={produto.nome}
                                                     className="rounded"
                                                     style={{width: 80, height: 80, objectFit: "cover"}}
@@ -50,10 +50,10 @@ export const CarrinhoCliente: React.FC = () =>
                                                     {item.tipo === "pizza" && (
                                                         <>
                                                             <small className="text-muted d-block">
-                                                                Tamanho: {item.produto.tamanhoPizza}
+                                                                Tamanho: {item.produto.tamanho}
                                                             </small>
                                                             <small className="text-muted">
-                                                                {item.produto.ingredientes.map((i) => i.nomeIngrediente).join(", ")}
+                                                                {item.produto.itens.map((i) => i.nomeIngrediente).join(", ")}
                                                             </small>
                                                         </>
                                                     )}

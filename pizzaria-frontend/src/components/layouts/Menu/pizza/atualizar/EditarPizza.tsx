@@ -1,243 +1,46 @@
 import * as React from "react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router";
 import {MenuInicial} from "../../LayoutMenu.tsx";
 import {useCarrinho} from "../../../../../contexts/CarrinhoContext.tsx";
-import {type Pizza, TamanhoPizza} from "../../../../../models/Pizza/Pizza.ts";
-import {UnidadeMedida} from "../../../../../models/Pizza/IngredientePizza.ts";
+import {type Pizza} from "../../../../../models/Pizza/Pizza.ts";
 import {itensMenu} from "../../../../config/MenuCliente.ts";
-export const pizzas: Pizza[] = [
-    {
-        id: 1,
-        nome: "Mussarela",
-        preco: 44.90,
-        tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pizzas/mussarela.jpg",
-        itens: [
-            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Tomate", quantidade: 4, unidadeMedida: UnidadeMedida.FATIA },
-            { nomeIngrediente: "Manjericão", quantidade: 5, unidadeMedida: UnidadeMedida.UNIDADE }
-        ]
-    },
-    {
-        id: 2,
-        nome: "Pepperoni",
-        preco: 47.90,
-        tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pizzas/pepperoni.jpg",
-        itens: [
-            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
-        ]
-    },
-    {
-        id: 3,
-        nome: "Pepperoni",
-        preco: 47.90,
-        tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pizzas/pepperoni.jpg",
-        itens: [
-            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
-        ]
-    },
-    {
-        id: 4,
-        nome: "Pepperoni",
-        preco: 47.90,
-        tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pizzas/pepperoni.jpg",
-        itens: [
-            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
-        ]
-    },
-    {
-        id: 5,
-        nome: "Pepperoni",
-        preco: 47.90,
-        tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pizzas/pepperoni.jpg",
-        itens: [
-            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
-        ]
-    },
-    {
-        id: 6,
-        nome: "Pepperoni",
-        preco: 47.90,
-        tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pizzas/pepperoni.jpg",
-        itens: [
-            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
-        ]
-    },
-    {
-        id: 7,
-        nome: "Pepperoni",
-        preco: 47.90,
-        tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pizzas/pepperoni.jpg",
-        itens: [
-            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
-        ]
-    },
-    {
-        id: 8,
-        nome: "Pepperoni",
-        preco: 47.90,
-        tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pizzas/pepperoni.jpg",
-        itens: [
-            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
-        ]
-    },
-    {
-        id: 9,
-        nome: "Pepperoni",
-        preco: 47.90,
-        tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pizzas/pepperoni.jpg",
-        itens: [
-            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
-        ]
-    },
-    {
-        id: 10,
-        nome: "Pepperoni",
-        preco: 47.90,
-        tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pizzas/pepperoni.jpg",
-        itens: [
-            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
-        ]
-    },
-    {
-        id: 11,
-        nome: "Pepperoni",
-        preco: 47.90,
-        tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pizzas/pepperoni.jpg",
-        itens: [
-            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
-        ]
-    },
-    {
-        id: 12,
-        nome: "Pepperoni",
-        preco: 47.90,
-        tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pizzas/pepperoni.jpg",
-        itens: [
-            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
-        ]
-    },
-    {
-        id: 13,
-        nome: "Pepperoni",
-        preco: 47.90,
-        tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pizzas/pepperoni.jpg",
-        itens: [
-            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
-        ]
-    },
-    {
-        id: 14,
-        nome: "Pepperoni",
-        preco: 47.90,
-        tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pizzas/pepperoni.jpg",
-        itens: [
-            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
-        ]
-    },
-    {
-        id: 15,
-        nome: "Pepperoni",
-        preco: 47.90,
-        tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pizzas/pepperoni.jpg",
-        itens: [
-            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
-        ]
-    },
-    {
-        id: 16,
-        nome: "Pepperoni",
-        preco: 47.90,
-        tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pizzas/pepperoni.jpg",
-        itens: [
-            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
-        ]
-    },
-    {
-        id: 17,
-        nome: "Pepperoni",
-        preco: 47.90,
-        tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pizzas/pepperoni.jpg",
-        itens: [
-            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
-        ]
-    },
-    {
-        id: 18,
-        nome: "Pepperoni",
-        preco: 47.90,
-        tamanhoPizza: TamanhoPizza.GRANDE,
-        imagem: "/imagens/pizzas/pepperoni.jpg",
-        itens: [
-            { nomeIngrediente: "Molho de tomate", quantidade: 100, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Mussarela", quantidade: 250, unidadeMedida: UnidadeMedida.GRAMA },
-            { nomeIngrediente: "Pepperoni", quantidade: 12, unidadeMedida: UnidadeMedida.FATIA }
-        ]
-    }
-];
+import {useCadastroPizzaService} from "../../../../../services/cadastro.pizzas.service.ts";
 
 const formatarPreco = (valor: number) =>
     valor.toLocaleString("pt-BR", {style: "currency", currency: "BRL"});
 
 export const MenuEditPizza: React.FC = () => {
-    const {id} = useParams();
     const navigate = useNavigate();
     const {adicionar} = useCarrinho();
-
     const [removidos, setRemovidos] = useState<string[]>([]);
     const [observacao, setObservacao] = useState("");
     const [quantidade, setQuantidade] = useState(1);
-    const pizza = pizzas.find((p) => p.id === Number(id));
+    const {id} = useParams<{ id: string }>();
+    const service = useCadastroPizzaService();
+    const [pizza, setPizza] = useState<Pizza | null>(null);
+    const [carregando, setCarregando] = useState(true);
+    const url = import.meta.env.VITE_SERVICO_PIZZA_URL;
+
+    useEffect(() => {
+        if (!id) {
+            setCarregando(false);
+            return;
+        }
+
+        service.listarPizza(id)
+            .then(setPizza)
+            .catch(() => setPizza(null))
+            .finally(() => setCarregando(false));
+    }, [id]);
+
+    if (carregando) {
+        return (
+            <MenuInicial titulo="Carregando..." subtitulo="" itensMenu={itensMenu}>
+                <p>Carregando pizza...</p>
+            </MenuInicial>
+        );
+    }
 
     if (!pizza) {
         return (
@@ -290,14 +93,14 @@ export const MenuEditPizza: React.FC = () => {
                 <div className="col-lg-5">
                     <div className="card shadow-sm">
                         <img
-                            src={pizza.imagem}
+                            src={`${url}${pizza.imagem}`}
                             alt={pizza.nome}
                             className="card-img-top"
                             style={{height: 300, objectFit: "cover"}}
                         />
                         <div className="card-body">
                             <h2 className="h4 mb-1">{pizza.nome}</h2>
-                            <span className="badge bg-secondary mb-2">{pizza.tamanhoPizza}</span>
+                            <span className="badge bg-secondary mb-2">{pizza.tamanho}</span>
                             <p className="fs-4 fw-bold text-success mb-0">{formatarPreco(pizza.preco)}</p>
                         </div>
                     </div>

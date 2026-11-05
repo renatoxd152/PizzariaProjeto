@@ -144,10 +144,7 @@ export const MenuPizzasAdmin: React.FC = () => {
                         <div className="pz-faixa" aria-hidden="true" />
 
                         <div className="pz-pagina">
-
-                            {/* Coluna principal */}
                             <div className="pz-principal">
-
                                 <section>
                                     <div className="pz-linha-prato">
                                         <label className="pz-campo pz-campo-nome">

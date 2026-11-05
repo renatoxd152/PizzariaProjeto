@@ -14,7 +14,7 @@ export interface Pizza
     id:number;
     nome:string;
     preco:number;
-    tamanhoPizza:TamanhoPizza;
+    tamanho:TamanhoPizza;
     itens: IngredientePizza[];
     imagem: string;
     observacao?:string;
