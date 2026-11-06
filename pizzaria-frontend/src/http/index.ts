@@ -24,3 +24,4 @@ function criarHttpClient(baseURL: string): AxiosInstance {
 
 export const httpClient = criarHttpClient("http://localhost:8081");
 export const httpClientUsuario = criarHttpClient("http://localhost:8080");
+export const httpClientPedidos = criarHttpClient("http://localhost:8082");

@@ -9,19 +9,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import projeto.microservices.pedidos.client.enums.UsuarioRole;
 import projeto.microservices.pedidos.client.representation.ClienteRepresentation;
 import projeto.microservices.pedidos.client.representation.PizzaRepresentation;
 import projeto.microservices.pedidos.configs.SecurityConfig;
+import projeto.microservices.pedidos.controller.dto.IngredienteDTO;
+import projeto.microservices.pedidos.controller.dto.ItemPedidoDTO;
 import projeto.microservices.pedidos.controller.dto.PedidoDTO;
+import projeto.microservices.pedidos.controller.dto.PizzaDTO;
+import projeto.microservices.pedidos.model.IngredientePizza;
+import projeto.microservices.pedidos.model.ItemPedido;
 import projeto.microservices.pedidos.model.Pedido;
+import projeto.microservices.pedidos.model.Pizza;
 import projeto.microservices.pedidos.model.enums.StatusPedido;
+import projeto.microservices.pedidos.model.enums.TamanhoPizza;
+import projeto.microservices.pedidos.model.enums.TipoProduto;
+import projeto.microservices.pedidos.model.enums.UnidadeMedida;
 import projeto.microservices.pedidos.service.PedidoService;
 import tools.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -36,8 +48,6 @@ public class PedidoControllerTest {
     private Pedido pedido;
     @Mock
     private ClienteRepresentation clienteRepresentation;
-    @Mock
-    private PizzaRepresentation pizzaRepresentation;
     @MockitoBean
     private PedidoService pedidoService;
     @Autowired
@@ -48,12 +58,31 @@ public class PedidoControllerTest {
     private JwtDecoder jwtDecoder;
 
     @BeforeEach
-    void setup()
-    {
-        pedidoDTO = new PedidoDTO("41613161212", List.of("id1"));
-        pizzaRepresentation = new PizzaRepresentation("Frango com Catupiry", BigDecimal.valueOf(49.9),"id");
-        clienteRepresentation = new ClienteRepresentation("Client", "1613123132", "41613161212" ,"idCliente");
-        pedido = new Pedido("idPedido", clienteRepresentation, List.of(pizzaRepresentation), BigDecimal.valueOf(49.9),StatusPedido.PENDENTE);
+    void setup() {
+        PizzaDTO pizzaDTO = new PizzaDTO(
+                "idpizza",
+                "Frango com Catupiry",
+                BigDecimal.valueOf(49.9),
+                TamanhoPizza.GIGANTE,
+                List.of(new IngredienteDTO(UUID.randomUUID().toString(), "Mussarela", 250, "GRAMAS")));
+
+        ItemPedidoDTO itemDTO = new ItemPedidoDTO(TipoProduto.PIZZA, pizzaDTO, 1);
+
+        pedidoDTO = new PedidoDTO("41613161212", List.of(itemDTO));
+
+        clienteRepresentation = new ClienteRepresentation(
+                "Client", "1613123132", "41613161212", "idCliente", UsuarioRole.CLIENTE);
+
+        Pizza pizzaPedido = new Pizza();
+        pizzaPedido.setId("idpizza");
+        pizzaPedido.setNome("Frango com Catupiry");
+        pizzaPedido.setPreco(BigDecimal.valueOf(49.9));
+        pizzaPedido.setTamanho(TamanhoPizza.GIGANTE);
+
+        ItemPedido itemPedido = new ItemPedido(TipoProduto.PIZZA, pizzaPedido, 1);
+
+        pedido = new Pedido("idPedido", clienteRepresentation, List.of(itemPedido),
+                BigDecimal.valueOf(49.9), StatusPedido.PENDENTE);
     }
 
     @Nested
@@ -66,7 +95,9 @@ public class PedidoControllerTest {
             when(pedidoService.adicionarPedido(pedidoDTO)).thenReturn(pedido);
 
             mockMvc.perform(post("/pedidos")
-                            .with(jwt().jwt(j -> j.subject(pedidoDTO.clienteCPF())))
+                            .with(jwt().jwt(j -> j.subject(pedidoDTO.clienteCPF()))
+                                    .authorities(new SimpleGrantedAuthority("ROLE_CLIENTE"))
+                            )
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(pedidoDTO)))
                     .andExpect(status().isOk());
@@ -96,7 +127,10 @@ public class PedidoControllerTest {
             when(pedidoService.listarPedidos()).thenReturn(List.of(pedido));
 
             mockMvc.perform(get("/pedidos")
-                            .with(jwt().jwt(j -> j.claim("cpf", pedidoDTO.clienteCPF())))
+                            .with(jwt().
+                                    jwt(j -> j.claim("cpf", pedidoDTO.clienteCPF()))
+                                    .authorities(new SimpleGrantedAuthority("ROLE_CLIENTE"))
+                            )
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(pedidoDTO)))
                     .andExpect(status().isOk());
@@ -124,7 +158,10 @@ public class PedidoControllerTest {
             when(pedidoService.listarPedidosPorIdCliente("idCliente")).thenReturn(List.of(pedido));
 
             mockMvc.perform(get("/pedidos/clientes/{id}", clienteRepresentation.id())
-                            .with(jwt().jwt(j -> j.claim("cpf", pedidoDTO.clienteCPF())))
+                            .with(jwt().
+                                    jwt(j -> j.claim("cpf", pedidoDTO.clienteCPF()))
+                                    .authorities(new SimpleGrantedAuthority("ROLE_ADMIN"))
+                            )
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(pedidoDTO)))
                     .andExpect(status().isOk());

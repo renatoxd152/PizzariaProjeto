@@ -19,7 +19,7 @@ public class Pedido {
     @Id
     private String id;
     private ClienteRepresentation clienteRepresentation;
-    private List<PizzaRepresentation> pizzas;
+    private List<ItemPedido> itens;
     private BigDecimal total;
     private StatusPedido statusPedido;
 }

@@ -3,7 +3,10 @@ import {useNavigate} from "react-router";
 import {MenuInicial} from "../layouts/Menu/LayoutMenu.tsx";
 import {useCarrinho} from "../../contexts/CarrinhoContext.tsx";
 import {itensMenu} from "../config/MenuCliente.ts";
-
+import {useState} from "react";
+import {usePedidoService} from "../../services/pedidos.service.ts";
+import type {Pedido} from "../../models/Pedido.ts";
+import {decodificarToken} from "../../utils/jwt.ts";
 const formatarPreco = (valor: number) =>
     valor.toLocaleString("pt-BR", {style: "currency", currency: "BRL"});
 
@@ -14,6 +17,37 @@ export const CarrinhoCliente: React.FC = () =>
     const taxaEntrega = itens.length > 0 ? 5 : 0;
     const total = subtotal + taxaEntrega;
     const url = import.meta.env.VITE_SERVICO_PIZZA_URL;
+    const {salvar} = usePedidoService();
+    const [salvando, setSalvando] = useState(false);
+    const [erro, setErro] = useState<string | null>(null);
+
+    const finalizarPedido = async () => {
+        const token = localStorage.getItem("token");
+        const cpfCliente = token ? decodificarToken(token)?.sub : undefined;
+        console.log("CPF DO CLIENTE:", cpfCliente)
+        if (!cpfCliente) {
+            setErro("Sessão expirada. Faça login novamente.");
+            return;
+        }
+
+        setSalvando(true);
+        setErro(null);
+        try {
+            const pedido: Pedido = {
+                clienteCPF: cpfCliente,
+                itens,
+            };
+
+            await salvar(pedido);
+            limparCarrinho();
+            navigate("/checkout");
+        } catch (e) {
+            setErro("Não foi possível finalizar o pedido. Tente novamente.");
+        } finally {
+            setSalvando(false);
+        }
+    };
+
     return(
         <MenuInicial
             titulo={<><i className="bi bi-cart3 me-2"></i>Seu pedido</>}
@@ -123,12 +157,16 @@ export const CarrinhoCliente: React.FC = () =>
                                     <strong>{formatarPreco(total)}</strong>
                                 </div>
 
+                                {erro && <div className="alert alert-danger py-2">{erro}</div>}
+
                                 <button
                                     className="btn btn-success w-100"
-                                    onClick={() => navigate("/checkout")}
+                                    onClick={finalizarPedido}
+                                    disabled={salvando}
                                 >
-                                    Finalizar pedido
+                                    {salvando ? "Enviando..." : "Finalizar pedido"}
                                 </button>
+
                             </div>
                         </div>
                     </div>
