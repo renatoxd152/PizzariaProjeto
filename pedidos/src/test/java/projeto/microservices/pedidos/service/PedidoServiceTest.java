@@ -57,7 +57,7 @@ public class PedidoServiceTest {
 
     private ItemPedido itemPedido;
     private Pedido pedido;
-    private  List<Pedido> pedidos;
+    private List<Pedido> pedidos;
 
     @Mock
     private ItemPedidoMapper itemPedidoMapper;

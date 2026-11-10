@@ -6,19 +6,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import projeto.microservices.pizzas.controller.dto.BebidaDTO;
 import projeto.microservices.pizzas.controller.dto.PizzaDTO;
-import projeto.microservices.pizzas.controller.mapper.BebidaMapper;
 import projeto.microservices.pizzas.controller.mapper.PizzaMapper;
-import projeto.microservices.pizzas.model.Bebida;
 import projeto.microservices.pizzas.model.Pizza;
 import projeto.microservices.pizzas.service.PizzaService;
-
 import java.io.IOException;
 import java.util.List;
 

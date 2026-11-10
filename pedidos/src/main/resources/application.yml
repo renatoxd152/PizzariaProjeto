@@ -2,7 +2,9 @@ spring:
   application:
     name: pedidos
   config:
-    import: optional:file:.env[.properties]
+    import:
+      - optional:file:.env[.properties]
+      - optional:file:../.env[.properties]
   mongodb:
     host: localhost
     port: 27019

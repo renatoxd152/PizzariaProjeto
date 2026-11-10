@@ -9,6 +9,7 @@ import MenuPizzasAdmin from "../pages/menuAdmin/index.tsx"
 import {RotaProtegida} from "../components/RotaAutenticada.tsx";
 import {MenuListagemPizzasAdmin} from "../components/layouts/MenuAdmin/listagemPizzas";
 import MenuBebidasAdmin from "../pages/menuAdmin/bebidas/index.tsx";
+import MenuListagemPedidosAdmin from "../pages/menuAdmin/pedidos/index.tsx";
 export const AppRoutes = () => {
     return (
         <Routes>
@@ -28,6 +29,7 @@ export const AppRoutes = () => {
                 <Route path="/cadastro/pizzas" element={<MenuPizzasAdmin />} />
                 <Route path="/cadastro/bebidas" element={<MenuBebidasAdmin/>}/>
                 <Route path="/listar/pizzas" element={<MenuListagemPizzasAdmin />} />
+                <Route path="/listar/pedidos" element={<MenuListagemPedidosAdmin/>}/>
             </Route>
         </Routes>
     );

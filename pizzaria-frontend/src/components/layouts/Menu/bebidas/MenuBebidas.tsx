@@ -1,55 +1,55 @@
 import * as React from "react";
 import {MenuInicial} from "../LayoutMenu.tsx";
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {useNavigate} from "react-router";
 import {useCarrinho} from "../../../../contexts/CarrinhoContext.tsx";
 import type {Bebida} from "../../../../models/Bebida.ts";
 import {BebidaItem} from "../../../bebidas/BebidaItem.tsx";
 import {itensMenu} from "../../../config/MenuCliente.ts";
-
-const bebidas: Bebida[] = [ {
-    id: 1,
-    nome: "Coca-Cola 350ml",
-    preco: 6.00,
-    imagem: "/imagens/bebidas/coca-cola.png"
-},
-    {
-        id: 2,
-        nome: "Guaraná Antarctica 350ml",
-        preco: 6.00,
-        imagem: "/imagens/bebidas/guarana.png"
-    },
-    {
-        id: 3,
-        nome: "Fanta Laranja 350ml",
-        preco: 6.00,
-        imagem: "/imagens/bebidas/fanta.png"
-    },
-    {
-        id: 4,
-        nome: "Sprite 350ml",
-        preco: 6.00,
-        imagem: "/imagens/bebidas/sprite.png"
-    }]
-
+import {useCadastroBebidaService} from "../../../../services/cadastro.bebidas.service.ts";
 
 export const MenuBebidas: React.FC = () =>
 {
     const [busca, setBusca] = useState("");
+    const [bebidas, setBebidas] = useState<Bebida[]>([]);
+    const [carregando, setCarregando] = useState(true);
+    const [erro, setErro] = useState<string | null>(null);
+
     const navigate = useNavigate();
     const {totalItens, adicionar} = useCarrinho();
+    const {listar} = useCadastroBebidaService();
+    const url = import.meta.env.VITE_SERVICO_PIZZA_URL;
+    useEffect(() => {
+        let ativo = true;
+
+        const carregarBebidas = async () => {
+            try {
+                const dados = await listar();
+                if (ativo) setBebidas(dados);
+            } catch {
+                if (ativo) setErro("Não foi possível carregar as bebidas.");
+            } finally {
+                if (ativo) setCarregando(false);
+            }
+        };
+
+        carregarBebidas();
+
+        return () => {
+            ativo = false;
+        };
+    }, []);
+
     const bebidasFiltradas = useMemo(() => {
         const termo = busca.trim().toLowerCase();
-        return bebidas.filter(
-            (p) =>
-                p.nome.toLowerCase().includes(termo)
-        );
-    }, [busca]);
+        return bebidas.filter((p) => p.nome.toLowerCase().includes(termo));
+    }, [busca, bebidas]);
 
     const handleAdicionarBebida = (bebida: Bebida) =>
     {
-        adicionar("bebida",bebida);
-    }
+        adicionar("bebida", bebida);
+    };
+
     return (
         <MenuInicial
             titulo="Cardápio de Bebidas"
@@ -65,8 +65,8 @@ export const MenuBebidas: React.FC = () =>
                     <i className="bi bi-cart3 fs-5"></i>
                     {totalItens > 0 && (
                         <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            {totalItens}
-        </span>
+                            {totalItens}
+                        </span>
                     )}
                 </button>
             }
@@ -77,14 +77,20 @@ export const MenuBebidas: React.FC = () =>
                     type="search"
                     className="form-control"
                     style={{ maxWidth: 320 }}
-                    placeholder="Buscar pizza..."
+                    placeholder="Buscar bebida..."
                     value={busca}
                     onChange={(e) => setBusca(e.target.value)}
-                    aria-label="Buscar pizza"
+                    aria-label="Buscar bebida"
                 />
             </div>
 
-            {bebidasFiltradas.length === 0 ? (
+            {carregando ? (
+                <div className="text-center py-5">
+                    <div className="spinner-border" role="status" />
+                </div>
+            ) : erro ? (
+                <div className="alert alert-danger">{erro}</div>
+            ) : bebidasFiltradas.length === 0 ? (
                 <div className="text-center text-muted py-5">
                     <p className="fs-5 mb-1">Nenhuma bebida encontrada</p>
                 </div>
@@ -95,7 +101,7 @@ export const MenuBebidas: React.FC = () =>
                             <BebidaItem
                                 nome={p.nome}
                                 preco={p.preco}
-                                imagem={p.imagem}
+                                imagem={`${url}${p.imagem}`}
                                 onAdicionar={() => handleAdicionarBebida(p)}
                             />
                         </div>
