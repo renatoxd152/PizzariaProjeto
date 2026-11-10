@@ -11,8 +11,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import projeto.microservices.pizzas.controller.dto.BebidaDTO;
 import projeto.microservices.pizzas.controller.dto.PizzaDTO;
+import projeto.microservices.pizzas.controller.mapper.BebidaMapper;
 import projeto.microservices.pizzas.controller.mapper.PizzaMapper;
+import projeto.microservices.pizzas.model.Bebida;
 import projeto.microservices.pizzas.model.Pizza;
 import projeto.microservices.pizzas.service.PizzaService;
 
@@ -27,6 +30,7 @@ public class PizzaController {
     private final PizzaService pizzaService;
 
     private final PizzaMapper pizzaMapper;
+
     @Operation(summary = "Cadastrar pizza")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Pizza criada com sucesso"),

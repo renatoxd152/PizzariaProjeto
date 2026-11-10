@@ -31,9 +31,7 @@ public class PedidoController {
     @PostMapping
     public ResponseEntity<Pedido> criarPedido(@RequestBody PedidoDTO pedidoDTO, @AuthenticationPrincipal Jwt jwt)
     {
-        System.out.println("PEDIDO DTO:" + pedidoDTO);
         Pedido pedido = pedidoService.adicionarPedido(pedidoDTO);
-        System.out.println("PEDIDO CRIADO:" + pedido);
         return ResponseEntity.ok(pedido);
     }
     @Operation(summary = "Listar todas as pizzas")

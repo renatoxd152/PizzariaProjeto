@@ -19,31 +19,16 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.UUID;
 
+import static projeto.microservices.pizzas.service.utils.ImagemUtils.salvarImagem;
+
 @Service
 @RequiredArgsConstructor
 public class PizzaService {
     private final PizzaRepository pizzaRepository;
 
     public Pizza criarPizza(Pizza pizza, MultipartFile imagem) throws IOException {
-        pizza.setImagem(salvarImagem(imagem));
+        pizza.setImagem(salvarImagem(imagem,"pizzas"));
         return pizzaRepository.save(pizza);
-    }
-
-    private String salvarImagem(MultipartFile imagem) throws IOException {
-
-        String nomeArquivo = UUID.randomUUID() + "_" + imagem.getOriginalFilename();
-
-        Path caminho = Paths.get("uploads/pizzas", nomeArquivo);
-
-        Files.createDirectories(caminho.getParent());
-
-        Files.copy(
-                imagem.getInputStream(),
-                caminho,
-                StandardCopyOption.REPLACE_EXISTING
-        );
-
-        return "/uploads/pizzas/" + nomeArquivo;
     }
 
     public List<Pizza> listarPizzas() {

@@ -1,6 +1,6 @@
 export interface Bebida {
-    id:number;
+    id?:number;
     nome:string;
     preco:number;
-    imagem:string;
+    imagem?:string;
 }
