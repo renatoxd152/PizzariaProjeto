@@ -19,6 +19,7 @@ import projeto.microservices.usuarios.service.UsuarioService;
 import projeto.microservices.usuarios.service.JWTService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("usuarios")
@@ -103,7 +104,10 @@ public class UsuarioController {
     public ResponseEntity<LoginResponse> login(@RequestBody UsuarioLoginDTO usuarioLoginDTO)
     {
         Usuario usuario = usuarioService.login(usuarioLoginDTO);
-        String token = jwtService.generateToken(usuario);
+        String token = jwtService.generateToken(
+                Map.of("id", usuario.getId()),
+                usuario
+        );
         LoginResponse loginResponse = new LoginResponse(token,jwtService.getExpirationTime());
 
         return ResponseEntity.ok(loginResponse);
