@@ -29,9 +29,8 @@ public class PedidoService {
     private final PedidoRepository pedidoRepository;
     private final PedidoPublisher pedidoPublisher;
     private final ItemPedidoMapper itemPedidoMapper;
-
+    private static final BigDecimal TAXA_ENTREGA = new BigDecimal("5.00");
     public Pedido adicionarPedido(PedidoDTO pedidoDTO) {
-        System.out.println("CPF VINDO DO PEDIDO:" + pedidoDTO.clienteCPF());
         ResponseEntity<ClienteRepresentation> clienteRepresentation = clienteClient.obterDadosDoCliente(pedidoDTO.clienteCPF());
         if (clienteRepresentation.getBody().usuarioRole() != UsuarioRole.CLIENTE)
         {
@@ -49,17 +48,15 @@ public class PedidoService {
         pedido.setClienteRepresentation(clienteRepresentation.getBody());
         pedido.setItens(itens);
         pedido.setStatusPedido(StatusPedido.PENDENTE);
-        pedido.setTotal(somarValoresDoPedido(itens));
+        pedido.setTotal(somarValoresDoPedido(itens).add(TAXA_ENTREGA));
         return pedido;
     }
 
     private static BigDecimal somarValoresDoPedido(List<ItemPedido> itens) {
-        BigDecimal total = BigDecimal.ZERO;
-        for(ItemPedido item : itens)
-        {
-            total = total.add(item.getProduto().getPreco());
-        }
-        return total;
+        return itens.stream()
+                .map(item -> item.getProduto().getPreco()
+                        .multiply(BigDecimal.valueOf(item.getQuantidade())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public List<Pedido> listarPedidos() {

@@ -1,10 +1,10 @@
 package projeto.microservices.pagamentos.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import projeto.microservices.pagamentos.model.enums.FormaPagamento;
 import projeto.microservices.pagamentos.model.enums.StatusPedido;
 
 import java.io.Serializable;
@@ -20,4 +20,5 @@ public class Pagamento implements Serializable {
     private StatusPedido statusPedido;
     private BigDecimal total;
     private String cpf;
+    private FormaPagamento formaPagamento;
 }

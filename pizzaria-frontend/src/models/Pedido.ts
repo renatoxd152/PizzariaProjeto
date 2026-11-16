@@ -9,4 +9,5 @@ export type ItemPedido =
 export interface Pedido {
     clienteCPF: string;
     itens: ItemPedido[];
+    id?: string;
 }

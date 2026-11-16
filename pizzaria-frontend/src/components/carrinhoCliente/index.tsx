@@ -24,7 +24,7 @@ export const CarrinhoCliente: React.FC = () =>
     const finalizarPedido = async () => {
         const token = localStorage.getItem("token");
         const cpfCliente = token ? decodificarToken(token)?.sub : undefined;
-        console.log("CPF DO CLIENTE:", cpfCliente)
+
         if (!cpfCliente) {
             setErro("Sessão expirada. Faça login novamente.");
             return;
@@ -35,12 +35,14 @@ export const CarrinhoCliente: React.FC = () =>
         try {
             const pedido: Pedido = {
                 clienteCPF: cpfCliente,
-                itens,
+                itens
             };
-
-            await salvar(pedido);
+            console.log("ITENS QUE FORAM SALVOS:", itens)
+            console.log("PEDIDO:", pedido)
+            const pedidoSalvo =  await salvar(pedido);
+            console.log("PEDIDO SALVO:",pedidoSalvo)
             limparCarrinho();
-            navigate("/checkout");
+            navigate(`/checkout/${pedidoSalvo.id}`);
         } catch (e) {
             setErro("Não foi possível finalizar o pedido. Tente novamente.");
         } finally {

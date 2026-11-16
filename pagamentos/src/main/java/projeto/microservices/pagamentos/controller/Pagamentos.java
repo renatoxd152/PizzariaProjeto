@@ -42,4 +42,13 @@ public class Pagamentos {
         log.info("Listando todos os pagamentos!");
         return ResponseEntity.ok(pagamentoService.listarPagamentos(cpf));
     }
+
+    @Operation(summary = "Listar pagamento pelo ID")
+    @ApiResponse(responseCode = "200", description = "Pagamento listado pelo ID")
+    @GetMapping("pedido/{id}")
+    public ResponseEntity<Pagamento> listarPagamento(@PathVariable String id)
+    {
+        log.info("Listando o pagamento!");
+        return ResponseEntity.ok(pagamentoService.listarPagamento(id));
+    }
 }

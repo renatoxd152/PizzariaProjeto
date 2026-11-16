@@ -1,5 +1,4 @@
 package projeto.microservices.pagamentos.service;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -9,10 +8,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import projeto.microservices.pagamentos.model.Pagamento;
+import projeto.microservices.pagamentos.model.enums.FormaPagamento;
 import projeto.microservices.pagamentos.model.enums.StatusPedido;
 import projeto.microservices.pagamentos.repository.PagamentoRepository;
-import projeto.microservices.pagamentos.subscriber.representation.PagamentoRepresentation;
-import projeto.microservices.pagamentos.subscriber.representation.PedidoRepresentation;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +36,7 @@ public class PagamentoServiceTest {
         p1.setTotal(BigDecimal.valueOf(150.0));
         p1.setStatusPedido(StatusPedido.PAGAMENTO_APROVADO);
         p1.setCpf("4113123123");
+        p1.setFormaPagamento(FormaPagamento.DINHEIRO);
 
         p2 = new Pagamento();
         p2.setId("6aa9beaba430d802b5b88412");
@@ -45,7 +44,7 @@ public class PagamentoServiceTest {
         p2.setTotal(BigDecimal.valueOf(150.0));
         p2.setStatusPedido(StatusPedido.ERRO_PAGAMENTO);
         p2.setCpf("41513123123");
-
+        p2.setFormaPagamento(FormaPagamento.DINHEIRO);
     }
 
     @Nested
@@ -59,23 +58,15 @@ public class PagamentoServiceTest {
             pagamento.setIdPedido("6aa9beaba430d802b5b88376");
             pagamento.setTotal(BigDecimal.valueOf(48.00));
 
-            PagamentoRepresentation pagamentoRepresentation = new PagamentoRepresentation(
-                    "6aa9beaba430d802b5b88376",
-                    "idPedido",
-                    StatusPedido.PENDENTE,
-                    BigDecimal.valueOf(48.00),
-                    "351312231"
-            );
-
             when(pagamentoRepository.findByIdPedido(pagamento.getIdPedido()))
-                    .thenReturn(Optional.of(pagamentoRepresentation));
+                    .thenReturn(Optional.of(pagamento));
 
             when(pagamentoRepository.save(any(Pagamento.class)))
                     .thenAnswer(invocation -> invocation.getArgument(0));
 
             Pagamento resultado = pagamentoService.pagar(pagamento);
 
-            assertEquals(pagamentoRepresentation.total(),resultado.getTotal());
+            assertEquals(pagamento.getTotal(),resultado.getTotal());
             assertEquals(StatusPedido.PAGAMENTO_APROVADO, resultado.getStatusPedido());
         }
 
@@ -87,23 +78,15 @@ public class PagamentoServiceTest {
             pagamento.setIdPedido("6aa9beaba430d802b5b88376");
             pagamento.setTotal(BigDecimal.valueOf(47.00));
 
-            PagamentoRepresentation pagamentoRepresentation = new PagamentoRepresentation(
-                    "6aa9beaba430d802b5b88376",
-                    "idPedido",
-                    StatusPedido.PENDENTE,
-                    BigDecimal.valueOf(48.00)
-                    ,"351312231"
-            );
-
             when(pagamentoRepository.findByIdPedido(pagamento.getIdPedido()))
-                    .thenReturn(Optional.of(pagamentoRepresentation));
+                    .thenReturn(Optional.of(pagamento));
 
             when(pagamentoRepository.save(any(Pagamento.class)))
                     .thenAnswer(invocation -> invocation.getArgument(0));
 
             Pagamento resultado = pagamentoService.pagar(pagamento);
 
-            assertNotEquals(pagamentoRepresentation.total(),resultado.getTotal());
+            assertNotEquals(pagamento.getTotal(),resultado.getTotal());
             assertEquals(StatusPedido.ERRO_PAGAMENTO, resultado.getStatusPedido());
         }
     }
@@ -139,6 +122,15 @@ public class PagamentoServiceTest {
             List<Pagamento> resultado = pagamentoService.listarPagamentos(p1.getCpf());
 
             assertEquals(pagamentos,resultado);
+        }
+
+        @Test
+        @DisplayName("Deve listar um pagamento pelo ID")
+        public void deveListarPagamentoPeloID()
+        {
+            when(pagamentoRepository.findByIdPedido("6aa9beaba430d802b5b88376")).thenReturn(Optional.of(p1));
+            Pagamento pagamento = pagamentoService.listarPagamento("6aa9beaba430d802b5b88376");
+            assertEquals(p1, pagamento);
         }
     }
 }

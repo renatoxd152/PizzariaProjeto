@@ -11,6 +11,8 @@ import {MenuListagemPizzasAdmin} from "../components/layouts/MenuAdmin/listagemP
 import MenuBebidasAdmin from "../pages/menuAdmin/bebidas/index.tsx";
 import MenuListagemPedidosAdmin from "../pages/menuAdmin/pedidos/index.tsx";
 import MenuPedidos from "../pages/menu/pedidos/index.tsx";
+import MenuCheckout from "../pages/menu/checkout/index.tsx";
+import MenuConfirmacao from "../pages/menu/TelaConfirmacaoPagamento/index.tsx"
 export const AppRoutes = () => {
     return (
         <Routes>
@@ -24,6 +26,8 @@ export const AppRoutes = () => {
                 <Route path="/bebidas" element={<MenuBebidas />} />
                 <Route path="/editar/pizza/:id" element={<MenuEditPizza />} />
                 <Route path="/pedidos" element={<MenuPedidos/>}/>
+                <Route path="/checkout/:id" element={<MenuCheckout/>}/>
+                <Route path="/pedido/confirmado" element={<MenuConfirmacao/>}/>
             </Route>
 
             <Route element={<RotaProtegida roleNecessaria="ROLE_ADMIN"/>}>
