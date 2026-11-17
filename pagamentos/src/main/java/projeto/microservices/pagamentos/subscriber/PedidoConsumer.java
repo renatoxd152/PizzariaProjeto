@@ -26,6 +26,4 @@ public class PedidoConsumer {
             throw new RuntimeException(e);
         }
     }
-
-
 }

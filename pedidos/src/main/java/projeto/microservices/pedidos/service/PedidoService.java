@@ -66,4 +66,19 @@ public class PedidoService {
     public List<Pedido> listarPedidosPorIdCliente(String idCliente) {
         return pedidoRepository.findByIdCliente(idCliente);
     }
+
+    public Pedido atualizarStatusPagamento(String idPedido) {
+
+        Pedido pedido = pedidoRepository
+                .findById(idPedido)
+                .orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Pedido não encontrado!"
+                        ));
+
+        pedido.setStatusPedido(StatusPedido.EM_PREPARO);
+
+        return pedidoRepository.save(pedido);
+    }
 }

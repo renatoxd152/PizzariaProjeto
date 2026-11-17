@@ -8,7 +8,8 @@ export interface Pagamento{
     id?:string;
     idPedido?:string;
     statusPedido?:StatusPedido;
-    total: number;
+    valorAPagar: number;
+    total?:number;
     cpf?: string;
     formaPagamento?: FormaPagamentoDoPedido;
 }

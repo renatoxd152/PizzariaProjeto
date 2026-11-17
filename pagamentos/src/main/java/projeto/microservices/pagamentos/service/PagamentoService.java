@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import projeto.microservices.pagamentos.model.Pagamento;
 import projeto.microservices.pagamentos.model.enums.StatusPedido;
+import projeto.microservices.pagamentos.publisher.PagamentoPublisher;
 import projeto.microservices.pagamentos.repository.PagamentoRepository;
 import projeto.microservices.pagamentos.subscriber.representation.PedidoRepresentation;
 
@@ -16,8 +17,8 @@ import java.util.List;
 @Slf4j
 public class PagamentoService {
     private final PagamentoRepository pagamentoRepository;
+    private final PagamentoPublisher pagamentoPublisher;
     public Pagamento pagar(Pagamento pagamento) {
-
         Pagamento pagamentoEncontrado =
                 pagamentoRepository.findByIdPedido(pagamento.getIdPedido())
                         .orElseThrow(() ->
@@ -26,27 +27,29 @@ public class PagamentoService {
                                         "Pedido não encontrado!"
                                 ));
 
-        Pagamento pagamentoCriado = new Pagamento();
-
-        pagamentoCriado.setIdPedido(pagamentoEncontrado.getId());
-        pagamentoCriado.setTotal(pagamentoEncontrado.getTotal());
-        pagamentoCriado.setCpf(pagamentoEncontrado.getCpf());
         if (pagamentoEncontrado.getStatusPedido() != StatusPedido.PENDENTE) {
 
-            pagamentoCriado.setStatusPedido(StatusPedido.ERRO_PAGAMENTO);
+            pagamentoEncontrado.setStatusPedido(StatusPedido.ERRO_PAGAMENTO);
 
-            return pagamentoRepository.save(pagamentoCriado);
+            return pagamentoRepository.save(pagamentoEncontrado);
         }
 
         if (pagamento.getTotal().compareTo(pagamentoEncontrado.getTotal()) != 0) {
-            pagamentoCriado.setStatusPedido(StatusPedido.ERRO_PAGAMENTO);
 
-            return pagamentoRepository.save(pagamentoCriado);
+            pagamentoEncontrado.setStatusPedido(StatusPedido.ERRO_PAGAMENTO);
+
+            return pagamentoRepository.save(pagamentoEncontrado);
         }
 
-        pagamentoCriado.setStatusPedido(StatusPedido.PAGAMENTO_APROVADO);
+        pagamentoEncontrado.setFormaPagamento(
+                pagamento.getFormaPagamento()
+        );
 
-        return pagamentoRepository.save(pagamentoCriado);
+        pagamentoEncontrado.setStatusPedido(
+                StatusPedido.PAGAMENTO_APROVADO
+        );
+        pagamentoPublisher.publicar(pagamentoEncontrado);
+        return pagamentoRepository.save(pagamentoEncontrado);
     }
 
     public void criarPedido(PedidoRepresentation pedidoCriado) {

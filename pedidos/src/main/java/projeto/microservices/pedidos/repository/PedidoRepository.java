@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface PedidoRepository extends MongoRepository<Pedido, String> {
     @Query("{ 'clienteRepresentation.id': ?0 }")
     List<Pedido> findByIdCliente(String id);
+    Optional<Pedido> findById(String id);
 }

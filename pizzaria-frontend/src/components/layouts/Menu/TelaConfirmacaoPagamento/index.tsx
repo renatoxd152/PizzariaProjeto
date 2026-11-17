@@ -2,6 +2,9 @@ import * as React from "react";
 import {useNavigate, useParams} from "react-router";
 import {MenuInicial} from "../LayoutMenu.tsx";
 import {itensMenu} from "../../../config/MenuCliente.ts";
+import {useEffect, useState} from "react";
+import {usePagamentoService} from "../../../../services/pagamentos.service.ts";
+import type {Pagamento} from "../../../../models/Pagamento.ts";
 
 type FormaPagamentoTipo = "PIX" | "CARTAO" | "DINHEIRO";
 type StatusPedido = "AGUARDANDO_PAGAMENTO" | "EM_PREPARO" | "SAIU_PARA_ENTREGA" | "ENTREGUE";
@@ -67,14 +70,25 @@ const descreverPagamento = (p: PedidoConfirmado) => {
 
 export const MenuConfirmacaoPagamento: React.FC = () => {
     const navigate = useNavigate();
-    const {id} = useParams();
+    const {id} = useParams<{id: string}>();
+    const service = usePagamentoService();
+    const [pagamentoEncontrado, setPagamentoEncontrado] = useState<Pagamento | null>(null);
+    const [erro, setErro] = useState<string | null>(null);
     const pedido = {...pedidoExemplo, id: id ?? pedidoExemplo.id};
-
     const pagamento = descreverPagamento(pedido);
     const subtotal = pedido.itens.reduce((soma, i) => soma + i.preco * i.quantidade, 0);
-    const total = subtotal + pedido.taxaEntrega;
+    const total = pagamentoEncontrado?.total!;
     const etapaAtual = ETAPAS.findIndex((e) => e.status === pedido.statusPedido);
+    useEffect(() => {
+        if (!id) return;
 
+        let ativo = true;
+        service.listarPedido(id)
+            .then((p) => { if (ativo) setPagamentoEncontrado(p); })
+            .catch(() => { if (ativo) setErro("Não foi encontrado um pagamento para este pedido."); });
+
+        return () => { ativo = false; };
+    }, [id]);
     return (
         <MenuInicial
             titulo={
@@ -89,9 +103,9 @@ export const MenuConfirmacaoPagamento: React.FC = () => {
             })}`}
             itensMenu={itensMenu}
         >
+            {erro && <div className="alert alert-danger py-2">{erro}</div>}
             <div className="row g-4">
                 <div className="col-lg-8">
-                    {/* Status do pedido */}
                     <div className="card mb-3">
                         <div className="card-body">
                             <h6 className="mb-4">Acompanhe seu pedido</h6>
@@ -126,7 +140,6 @@ export const MenuConfirmacaoPagamento: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Itens */}
                     <div className="card">
                         <ul className="list-group list-group-flush">
                             {pedido.itens.map((item, i) => (

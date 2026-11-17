@@ -5,5 +5,7 @@ public enum StatusPedido {
     REALIZADO,
     FATURADO,
     ERRO_PAGAMENTO,
-    PREPARANDO_ENVIO
+    PREPARANDO_ENVIO,
+    EM_PREPARO,
+    PAGAMENTO_APROVADO
 }

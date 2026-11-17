@@ -2,6 +2,7 @@ package projeto.microservices.pagamentos.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import projeto.microservices.pagamentos.model.enums.FormaPagamento;
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 @Document("pedidos-pagamentos")
 @Getter
 @Setter
+@ToString
 public class Pagamento implements Serializable {
     @Id
     private String id;

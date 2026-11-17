@@ -37,10 +37,7 @@ export const CarrinhoCliente: React.FC = () =>
                 clienteCPF: cpfCliente,
                 itens
             };
-            console.log("ITENS QUE FORAM SALVOS:", itens)
-            console.log("PEDIDO:", pedido)
             const pedidoSalvo =  await salvar(pedido);
-            console.log("PEDIDO SALVO:",pedidoSalvo)
             limparCarrinho();
             navigate(`/checkout/${pedidoSalvo.id}`);
         } catch (e) {
@@ -69,7 +66,6 @@ export const CarrinhoCliente: React.FC = () =>
                         <div className="card">
                             <ul className="list-group list-group-flush">
                                 {itens.map((item) => {
-                                    console.log(item)
                                     const {tipo, produto, quantidade} = item;
                                     return (
                                         <li key={`${tipo}-${produto.id}`} className="list-group-item">
@@ -98,7 +94,7 @@ export const CarrinhoCliente: React.FC = () =>
                                                 <div className="d-flex align-items-center gap-2">
                                                     <button
                                                         className="btn btn-sm btn-outline-secondary"
-                                                        onClick={() => alterarQuantidade(tipo, produto.id, -1)}
+                                                        onClick={() => produto.id && alterarQuantidade(tipo, produto.id, -1)}
                                                         aria-label="Diminuir quantidade"
                                                     >
                                                         −
@@ -108,7 +104,7 @@ export const CarrinhoCliente: React.FC = () =>
                                                     </span>
                                                     <button
                                                         className="btn btn-sm btn-outline-secondary"
-                                                        onClick={() => alterarQuantidade(tipo, produto.id, 1)}
+                                                        onClick={() => produto.id && alterarQuantidade(tipo, produto.id, 1)}
                                                         aria-label="Aumentar quantidade"
                                                     >
                                                         +
@@ -120,7 +116,7 @@ export const CarrinhoCliente: React.FC = () =>
                                                     <div>
                                                         <button
                                                             className="btn btn-link btn-sm text-danger p-0"
-                                                            onClick={() => removerItem(tipo, produto.id)}
+                                                            onClick={() => produto.id && removerItem(tipo, produto.id)}
                                                         >
                                                             Remover
                                                         </button>

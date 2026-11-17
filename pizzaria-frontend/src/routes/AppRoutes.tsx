@@ -27,7 +27,7 @@ export const AppRoutes = () => {
                 <Route path="/editar/pizza/:id" element={<MenuEditPizza />} />
                 <Route path="/pedidos" element={<MenuPedidos/>}/>
                 <Route path="/checkout/:id" element={<MenuCheckout/>}/>
-                <Route path="/pedido/confirmado" element={<MenuConfirmacao/>}/>
+                <Route path="/pedido/confirmado/:id" element={<MenuConfirmacao/>}/>
             </Route>
 
             <Route element={<RotaProtegida roleNecessaria="ROLE_ADMIN"/>}>

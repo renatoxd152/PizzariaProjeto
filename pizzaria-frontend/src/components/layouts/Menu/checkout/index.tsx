@@ -7,7 +7,7 @@ import {type DadosPagamento, FormaPagamento} from "./FormaPagamento.tsx";
 import {usePagamentoService} from "../../../../services/pagamentos.service.ts";
 import {type FormaPagamentoDoPedido, type Pagamento} from "../../../../models/Pagamento.ts";
 
-const ROTA_CONFIRMACAO = "/pedido/confirmado";
+const ROTA_CONFIRMACAO = "/pedido/confirmado/";
 
 export const MenuCheckout: React.FC = () => {
     const navigate = useNavigate();
@@ -46,10 +46,10 @@ export const MenuCheckout: React.FC = () => {
         try {
             await service.salvar({
                 idPedido: id,
-                total: pagamentoEncontrado.total,
+                valorAPagar: pagamentoEncontrado.total!,
                 formaPagamento: dados.forma as FormaPagamentoDoPedido,
             });
-            navigate(ROTA_CONFIRMACAO);
+            navigate(`${ROTA_CONFIRMACAO}${id}`);
         } catch {
             setErro("Não foi possível registrar o pagamento. Tente novamente.");
         } finally {
@@ -70,7 +70,7 @@ export const MenuCheckout: React.FC = () => {
     return (
         <MenuInicial titulo="Escolha a forma de pagamento" itensMenu={itensMenu}>
             <FormaPagamento
-                total={pagamentoEncontrado.total}
+                total={pagamentoEncontrado.total!}
                 processando={processando}
                 erro={erro}
                 onPagar={pagar}

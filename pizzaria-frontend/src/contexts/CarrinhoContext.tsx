@@ -19,8 +19,8 @@ interface CarrinhoContextType {
     totalItens: number;
     valorTotal: number;
     adicionar: <K extends TipoItem>(tipo: K, produto: ProdutosPorTipo[K], quantidade?: number) => void;
-    alterarQuantidade: (tipo: TipoItem, id: number, delta: number) => void;
-    removerItem: (tipo: TipoItem, id: number) => void;
+    alterarQuantidade: (tipo: TipoItem, id: string, delta: number) => void;
+    removerItem: (tipo: TipoItem, id: string) => void;
     limparCarrinho: () => void;
 }
 
@@ -43,8 +43,10 @@ const carregarCarrinho = (): ItemCarrinho[] => {
     }
 };
 
-const mesmoItem = (i: ItemCarrinho, tipo: TipoItem, id: number) =>
-    i.tipo === tipo && i.produto.id === id;
+const mesmoItem = (i: ItemCarrinho, tipo: TipoItem, id?: string) =>
+    id !== undefined &&
+    i.tipo === tipo &&
+    i.produto.id === id;
 
 export const CarrinhoProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
     const [itens, setItens] = useState<ItemCarrinho[]>(carregarCarrinho);
@@ -63,14 +65,14 @@ export const CarrinhoProvider: React.FC<{children: React.ReactNode}> = ({childre
                 : [...atual, {tipo, produto, quantidade} as ItemCarrinho];
         });
 
-    const alterarQuantidade = (tipo: TipoItem, id: number, delta: number) =>
+    const alterarQuantidade = (tipo: TipoItem, id: string, delta: number) =>
         setItens((atual) =>
             atual
                 .map((i) => mesmoItem(i, tipo, id) ? {...i, quantidade: i.quantidade + delta} : i)
                 .filter((i) => i.quantidade > 0)
         );
 
-    const removerItem = (tipo: TipoItem, id: number) =>
+    const removerItem = (tipo: TipoItem, id: string) =>
         setItens((atual) => atual.filter((i) => !mesmoItem(i, tipo, id)));
 
     const limparCarrinho = () => setItens([]);

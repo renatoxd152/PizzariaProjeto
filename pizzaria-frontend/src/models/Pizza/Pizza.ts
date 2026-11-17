@@ -11,7 +11,7 @@ export enum TamanhoPizza
 
 export interface Pizza
 {
-    id:number;
+    id:string;
     nome:string;
     preco:number;
     tamanho:TamanhoPizza;
