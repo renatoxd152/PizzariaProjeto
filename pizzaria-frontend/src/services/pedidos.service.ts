@@ -24,5 +24,12 @@ export const usePedidoService = () => {
         return response.data;
     };
 
-    return { salvar, listar, listarPedidosDoCliente};
+    const listarPedidoPorId = async (idPedido: string): Promise<PedidoResponse> => {
+        const response: AxiosResponse<PedidoResponse> = await httpClientPedidos.get(
+            `${resourceURL}/${idPedido}`
+        );
+        return response.data;
+    };
+
+    return { salvar, listar, listarPedidosDoCliente,listarPedidoPorId};
 }

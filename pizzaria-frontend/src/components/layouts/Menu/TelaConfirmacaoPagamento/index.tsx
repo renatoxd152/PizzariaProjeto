@@ -4,67 +4,47 @@ import {MenuInicial} from "../LayoutMenu.tsx";
 import {itensMenu} from "../../../config/MenuCliente.ts";
 import {useEffect, useState} from "react";
 import {usePagamentoService} from "../../../../services/pagamentos.service.ts";
-import type {Pagamento} from "../../../../models/Pagamento.ts";
+import {FormaPagamentoDoPedido, type Pagamento} from "../../../../models/Pagamento.ts";
+import {usePedidoService} from "../../../../services/pedidos.service.ts";
+import type {PedidoResponse, StatusPedido} from "../../../../models/PedidoResponse.ts";
 
-type FormaPagamentoTipo = "PIX" | "CARTAO" | "DINHEIRO";
-type StatusPedido = "AGUARDANDO_PAGAMENTO" | "EM_PREPARO" | "SAIU_PARA_ENTREGA" | "ENTREGUE";
-
-interface ItemResumo {
-    nome: string;
-    detalhe?: string;
-    quantidade: number;
-    preco: number; // preço unitário
-}
-
-interface PedidoConfirmado {
-    id: string;
-    criadoEm: string; // ISO
-    formaPagamento: FormaPagamentoTipo;
-    ultimosDigitos?: string;
-    trocoPara?: number;
-    statusPedido: StatusPedido;
-    itens: ItemResumo[];
-    taxaEntrega: number;
-}
-
-const pedidoExemplo: PedidoConfirmado = {
-    id: "A1B2C3",
-    criadoEm: new Date().toISOString(),
-    formaPagamento: "PIX",
-    statusPedido: "EM_PREPARO",
-    taxaEntrega: 5,
-    itens: [
-        {nome: "Coca cola", quantidade: 1, preco: 6.9},
-        {nome: "Calabresa Especial", detalhe: "Tamanho: GRANDE • Mussarela, Calabresa", quantidade: 1, preco: 49.9},
-    ],
-};
-
-const formatarPreco = (valor: number) =>
-    valor.toLocaleString("pt-BR", {style: "currency", currency: "BRL"});
+const formatarPreco = (valor?: number) =>
+    (valor ?? 0).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+    });
 
 const ETAPAS: { status: StatusPedido; rotulo: string; icone: string }[] = [
-    {status: "AGUARDANDO_PAGAMENTO", rotulo: "Pedido recebido", icone: "bi-receipt"},
+    {status: "PENDENTE", rotulo: "Pedido recebido", icone: "bi-receipt"},
     {status: "EM_PREPARO", rotulo: "Em preparo", icone: "bi-fire"},
     {status: "SAIU_PARA_ENTREGA", rotulo: "Saiu para entrega", icone: "bi-bicycle"},
     {status: "ENTREGUE", rotulo: "Entregue", icone: "bi-house-check"},
 ];
 
-const descreverPagamento = (p: PedidoConfirmado) => {
+const descreverPagamento = (p: Pagamento | null) => {
+    if (!p) {
+        return {texto: "Carregando pagamento...", pago: false};
+    }
+
     switch (p.formaPagamento) {
-        case "PIX":
+        case FormaPagamentoDoPedido.PIX:
             return {texto: "Pago via Pix", pago: true};
-        case "CARTAO":
+        case FormaPagamentoDoPedido.CARTAO_CREDITO:
             return {
-                texto: p.ultimosDigitos ? `Pago com cartão final ${p.ultimosDigitos}` : "Pago com cartão",
+                texto: p.ultimosDigitos
+                    ? `Pago com cartão final ${p.ultimosDigitos}`
+                    : "Pago com cartão",
                 pago: true,
             };
-        case "DINHEIRO":
+        case FormaPagamentoDoPedido.DINHEIRO:
             return {
                 texto: p.trocoPara
                     ? `Pagar na entrega em dinheiro (troco para ${formatarPreco(p.trocoPara)})`
                     : "Pagar na entrega em dinheiro",
                 pago: false,
             };
+        default:
+            return {texto: "Forma de pagamento não informada", pago: false};
     }
 };
 
@@ -72,22 +52,44 @@ export const MenuConfirmacaoPagamento: React.FC = () => {
     const navigate = useNavigate();
     const {id} = useParams<{id: string}>();
     const service = usePagamentoService();
+    const pedidosService = usePedidoService();
     const [pagamentoEncontrado, setPagamentoEncontrado] = useState<Pagamento | null>(null);
+    const [pedidoEncontrado, setPedidoEncontrado] = useState<PedidoResponse | null>(null);
     const [erro, setErro] = useState<string | null>(null);
-    const pedido = {...pedidoExemplo, id: id ?? pedidoExemplo.id};
-    const pagamento = descreverPagamento(pedido);
-    const subtotal = pedido.itens.reduce((soma, i) => soma + i.preco * i.quantidade, 0);
-    const total = pagamentoEncontrado?.total!;
-    const etapaAtual = ETAPAS.findIndex((e) => e.status === pedido.statusPedido);
+    const pagamento = descreverPagamento(pagamentoEncontrado);
+    const total = pagamentoEncontrado?.total;
+    const etapaAtual = ETAPAS.findIndex((e) => e.status === pedidoEncontrado?.statusPedido);
+
     useEffect(() => {
         if (!id) return;
 
         let ativo = true;
-        service.listarPedido(id)
-            .then((p) => { if (ativo) setPagamentoEncontrado(p); })
-            .catch(() => { if (ativo) setErro("Não foi encontrado um pagamento para este pedido."); });
 
-        return () => { ativo = false; };
+        const buscarDados = async () => {
+            try {
+                const [pedido, pagamento] = await Promise.all([
+                    pedidosService.listarPedidoPorId(id),
+                    service.listarPedido(id)
+                ]);
+
+                if (ativo) {
+                    setPedidoEncontrado(pedido);
+                    setPagamentoEncontrado(pagamento);
+                }
+
+            } catch (error) {
+                if (ativo) {
+                    setErro("Não foi possível carregar os dados do pedido.");
+                }
+            }
+        };
+
+        buscarDados();
+
+        return () => {
+            ativo = false;
+        };
+
     }, [id]);
     return (
         <MenuInicial
@@ -97,10 +99,7 @@ export const MenuConfirmacaoPagamento: React.FC = () => {
                     {pagamento.pago ? "Pagamento feito com sucesso!" : "Pedido confirmado!"}
                 </>
             }
-            subtitulo={`Pedido #${pedido.id} • ${new Date(pedido.criadoEm).toLocaleString("pt-BR", {
-                dateStyle: "short",
-                timeStyle: "short",
-            })}`}
+            subtitulo={`Pedido #${pedidoEncontrado?.id}`}
             itensMenu={itensMenu}
         >
             {erro && <div className="alert alert-danger py-2">{erro}</div>}
@@ -141,19 +140,22 @@ export const MenuConfirmacaoPagamento: React.FC = () => {
                     </div>
 
                     <div className="card">
-                        <ul className="list-group list-group-flush">
-                            {pedido.itens.map((item, i) => (
-                                <li key={i} className="list-group-item d-flex justify-content-between gap-3">
-                                    <div>
+                        {!pedidoEncontrado ? (
+                            <div className="card-body text-muted">Carregando itens...</div>
+                        ) : (
+                            <ul className="list-group list-group-flush">
+                                {pedidoEncontrado.itens.map((item, i) => (
+                                    <li key={i} className="list-group-item d-flex justify-content-between gap-3">
                                         <div>
-                                            <span className="fw-semibold">{item.quantidade}x</span> {item.nome}
+                                            <div>
+                                                <span className="fw-semibold">{item.quantidade}x</span> {item.produto.nome}
+                                            </div>
                                         </div>
-                                        {item.detalhe && <small className="text-muted">{item.detalhe}</small>}
-                                    </div>
-                                    <strong>{formatarPreco(item.preco * item.quantidade)}</strong>
-                                </li>
-                            ))}
-                        </ul>
+                                        <strong>{formatarPreco(item.produto.preco * item.quantidade)}</strong>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
                     </div>
                 </div>
 
@@ -164,11 +166,11 @@ export const MenuConfirmacaoPagamento: React.FC = () => {
 
                             <div className="d-flex justify-content-between mb-2">
                                 <span>Itens</span>
-                                <span>{formatarPreco(subtotal)}</span>
+                                <span>{formatarPreco(pedidoEncontrado?.itens.reduce((soma, i) => soma + i.produto.preco * i.quantidade, 0))}</span>
                             </div>
                             <div className="d-flex justify-content-between mb-2">
                                 <span>Taxa de entrega</span>
-                                <span>{formatarPreco(pedido.taxaEntrega)}</span>
+                                <span>{formatarPreco(5.00)}</span>
                             </div>
 
                             <hr />

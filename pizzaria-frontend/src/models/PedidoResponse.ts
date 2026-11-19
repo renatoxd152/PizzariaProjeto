@@ -3,7 +3,12 @@ export type StatusPedido =
     | "REALIZADO"
     | "FATURADO"
     | "ERRO_PAGAMENTO"
-    | "PREPARANDO_ENVIO";
+    | "PREPARANDO_ENVIO"
+    | "EM_PREPARO"
+    | "AGUARDANDO_PAGAMENTO"
+    | "SAIU_PARA_ENTREGA"
+    | "ENTREGUE";
+
 
 export interface ClienteRepresentation {
     id: string;

@@ -33,7 +33,10 @@ import projeto.microservices.pedidos.service.PedidoService;
 import tools.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -134,6 +137,23 @@ public class PedidoControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(pedidoDTO)))
                     .andExpect(status().isOk());
+        }
+        @Test
+        @DisplayName("Deve listar um pedido de um cliente")
+        public void deveListarPedidoDeUmCliente() throws Exception {
+
+            when(pedidoService.listarPedidoPorId("idPedido"))
+                    .thenReturn(pedido);
+
+            mockMvc.perform(get("/pedidos/{id}", "idPedido")
+                            .with(jwt()
+                                    .jwt(j -> j.claim("cpf", pedidoDTO.clienteCPF()))
+                                    .authorities(new SimpleGrantedAuthority("ROLE_CLIENTE"))
+                            )
+                    )
+                    .andExpect(status().isOk());
+
+            verify(pedidoService).listarPedidoPorId("idPedido");
         }
 
         @Test

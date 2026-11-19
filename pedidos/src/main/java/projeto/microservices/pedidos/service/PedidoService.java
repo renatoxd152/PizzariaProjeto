@@ -81,4 +81,13 @@ public class PedidoService {
 
         return pedidoRepository.save(pedido);
     }
+
+    public Pedido listarPedidoPorId(String id) {
+        return pedidoRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Pedido não encontrado!"
+                        ));
+    }
 }

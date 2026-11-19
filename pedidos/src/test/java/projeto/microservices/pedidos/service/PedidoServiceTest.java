@@ -30,6 +30,7 @@ import projeto.microservices.pedidos.repository.PedidoRepository;
 import java.awt.event.ItemEvent;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -121,6 +122,15 @@ public class PedidoServiceTest {
             when(pedidoRepository.findAll()).thenReturn(pedidos);
             List<Pedido> resultado = pedidoService.listarPedidos();
             assertEquals(pedidos, resultado);
+        }
+
+        @Test
+        @DisplayName("Deve listar um pedido de um cliente")
+        public void deveListarPedidoDoCliente()
+        {
+            when(pedidoRepository.findById("id")).thenReturn(Optional.of(pedido));
+            Pedido resultado = pedidoService.listarPedidoPorId("id");
+            assertEquals(pedido, resultado);
         }
 
         @Test

@@ -47,4 +47,11 @@ public class PedidoController {
     {
         return ResponseEntity.ok(pedidoService.listarPedidosPorIdCliente(id));
     }
+
+    @Operation(summary = "Buscar pedido por ID")
+    @GetMapping("{id}")
+    public ResponseEntity<Pedido> listarPedidosPorId(@PathVariable String id)
+    {
+        return ResponseEntity.ok(pedidoService.listarPedidoPorId(id));
+    }
 }
