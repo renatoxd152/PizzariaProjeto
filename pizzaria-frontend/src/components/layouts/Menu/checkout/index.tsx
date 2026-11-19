@@ -58,7 +58,7 @@ export const MenuCheckout: React.FC = () => {
     };
 
     const verificarPix = async (): Promise<boolean> => pixPago;
-    const aoConfirmarPix = () => navigate(ROTA_CONFIRMACAO);
+    const aoConfirmarPix = () => navigate(`${ROTA_CONFIRMACAO}${id}`);
     const simularPix = async () => { setPixPago(true); };
 
     if (!pagamentoEncontrado) {
