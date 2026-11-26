@@ -1,7 +1,7 @@
 import {httpClientPedidos} from "../http";
 import type {Pedido} from "../models/Pedido.ts";
 import type {AxiosResponse} from "axios";
-import type {PedidoResponse} from "../models/PedidoResponse.ts";
+import type {PedidoResponse, StatusPedido} from "../models/PedidoResponse.ts";
 
 const resourceURL = "/pedidos";
 
@@ -31,5 +31,10 @@ export const usePedidoService = () => {
         return response.data;
     };
 
-    return { salvar, listar, listarPedidosDoCliente,listarPedidoPorId};
+    const atualizarStatusDoPedido = async (id: string, statusPedido: StatusPedido): Promise<Pedido> => {
+        const response = await httpClientPedidos.patch<Pedido>(`${resourceURL}/${id}/status`, {statusPedido});
+        return response.data;
+    };
+
+    return { salvar, listar, listarPedidosDoCliente,listarPedidoPorId,atualizarStatusDoPedido};
 }

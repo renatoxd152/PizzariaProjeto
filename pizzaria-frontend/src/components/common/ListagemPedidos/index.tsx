@@ -6,13 +6,15 @@ import type {
     StatusPedido
 } from "../../../models/PedidoResponse.ts";
 import "./index.css";
-
+import {decodificarToken} from "../../../utils/jwt.ts";
+import {usePedidoService} from "../../../services/pedidos.service.ts";
 type Filtro = StatusPedido | "TODOS";
 
 interface MenuListagemPedidosProps {
     pedidos: PedidoResponse[];
     carregando?: boolean;
     erro?: string | null;
+    onAlterarStatus?: (idPedido: string, novoStatus: StatusPedido) => Promise<void> | void;
 }
 
 const status: Record<StatusPedido, { rotulo: string; cor: string; fundo: string }> = {
@@ -21,6 +23,10 @@ const status: Record<StatusPedido, { rotulo: string; cor: string; fundo: string 
     FATURADO: { rotulo: "Faturado", cor: "#15803d", fundo: "#dcfce7" },
     ERRO_PAGAMENTO: { rotulo: "Erro no pagamento", cor: "#b91c1c", fundo: "#fee2e2" },
     PREPARANDO_ENVIO: { rotulo: "Preparando envio", cor: "#6d28d9", fundo: "#ede9fe" },
+    EM_PREPARO: { rotulo: "Em preparo", cor: "#c2410c", fundo: "#ffedd5" },
+    AGUARDANDO_PAGAMENTO: { rotulo: "Aguardando pagamento", cor: "#a16207", fundo: "#fef9c3" },
+    SAIU_PARA_ENTREGA: { rotulo: "Saiu para entrega", cor: "#0891b2", fundo: "#cffafe" },
+    ENTREGUE: { rotulo: "Entregue", cor: "#15803d", fundo: "#dcfce7" },
 };
 
 const moeda = (valor: number) =>
@@ -32,22 +38,34 @@ const descricaoItem = (item: ItemPedidoResponse) =>
         : item.produto.nome;
 
 export const MenuListagemPedidos: React.FC<MenuListagemPedidosProps> = ({
-                                                                                          pedidos,
-                                                                                          carregando = false,
-                                                                                          erro = null,
-                                                                                      }) => {
+                                                                            pedidos,
+                                                                            carregando = false,
+                                                                            erro = null,
+                                                                            onAlterarStatus,
+                                                                        }) => {
     const [filtro, setFiltro] = useState<Filtro>("TODOS");
+    const [statusLocal, setStatusLocal] = useState<Record<string, StatusPedido>>({});
+    const pedidosAtuais = useMemo(
+        () =>
+            pedidos.map((p) => ({
+                ...p,
+                statusPedido: statusLocal[p.id] ?? p.statusPedido,
+            })),
+        [pedidos, statusLocal]
+    );
 
     const contagem = useMemo(() => {
-        const mapa: Record<string, number> = { TODOS: pedidos.length };
-        pedidos.forEach((p) => {
+        const mapa: Record<string, number> = { TODOS: pedidosAtuais.length };
+        pedidosAtuais.forEach((p) => {
             mapa[p.statusPedido] = (mapa[p.statusPedido] ?? 0) + 1;
         });
         return mapa;
-    }, [pedidos]);
+    }, [pedidosAtuais]);
 
     const pedidosFiltrados =
-        filtro === "TODOS" ? pedidos : pedidos.filter((p) => p.statusPedido === filtro);
+        filtro === "TODOS"
+            ? pedidosAtuais
+            : pedidosAtuais.filter((p) => p.statusPedido === filtro);
 
     const opcoes: { valor: Filtro; rotulo: string }[] = [
         { valor: "TODOS", rotulo: "Todos" },
@@ -56,6 +74,26 @@ export const MenuListagemPedidos: React.FC<MenuListagemPedidosProps> = ({
             rotulo: status[s].rotulo,
         })),
     ];
+
+    const token = localStorage.getItem("token");
+    const tokenDecodificado = token ? decodificarToken(token) : null;
+    const ehAdmin = tokenDecodificado?.role.includes("ROLE_ADMIN") ?? false;
+    const pedidoService = usePedidoService();
+
+    const alterarStatus = async (idPedido: string, novoStatus: StatusPedido) => {
+        if (onAlterarStatus) {
+            await onAlterarStatus(idPedido, novoStatus);
+            return;
+        }
+
+        try {
+            await pedidoService.atualizarStatusDoPedido(idPedido, novoStatus);
+            setStatusLocal((atual) => ({ ...atual, [idPedido]: novoStatus }));
+        } catch (e) {
+            console.error(e);
+            alert("Não foi possível alterar o status.");
+        }
+    };
 
     return (
         <>
@@ -104,6 +142,26 @@ export const MenuListagemPedidos: React.FC<MenuListagemPedidosProps> = ({
                                     </li>
                                 ))}
                             </ul>
+
+                            {ehAdmin && (
+                                <div className="pd-admin">
+                                    <label htmlFor={`status-${pedido.id}`}>Alterar status:</label>
+                                    <select
+                                        id={`status-${pedido.id}`}
+                                        className="pd-select"
+                                        value={pedido.statusPedido}
+                                        onChange={(e) =>
+                                            alterarStatus(pedido.id, e.target.value as StatusPedido)
+                                        }
+                                    >
+                                        {(Object.keys(status) as StatusPedido[]).map((st) => (
+                                            <option key={st} value={st}>
+                                                {status[st].rotulo}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            )}
 
                             <footer className="pd-rodape">
                                 <span className="pd-id">{pedido.itens.length} item(ns)</span>

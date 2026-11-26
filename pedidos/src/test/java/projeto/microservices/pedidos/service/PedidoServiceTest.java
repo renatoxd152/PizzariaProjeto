@@ -149,5 +149,20 @@ public class PedidoServiceTest {
 
     }
 
+    @Nested
+    public class AtualizarPedido
+    {
+        @Test
+        @DisplayName("Deve atualizar o status do pedido de um cliente")
+        public void deveAtualizarOStatusDoPedidoDeUmCliente()
+        {
+            when(pedidoRepository.save(pedido)).thenReturn(pedido);
+            when(pedidoRepository.findById("id")).thenReturn(Optional.of(pedido));
+            Pedido resultado = pedidoService.atualizarStatusDoPedido("id", StatusPedido.PREPARANDO_ENVIO);
+            assertEquals(StatusPedido.PREPARANDO_ENVIO,resultado.getStatusPedido());
+        }
+    }
+
+
 
 }

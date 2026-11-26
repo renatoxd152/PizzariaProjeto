@@ -4,12 +4,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import projeto.microservices.pedidos.controller.dto.AtualizarStatusPedidoDTO;
 import projeto.microservices.pedidos.controller.dto.PedidoDTO;
 import projeto.microservices.pedidos.model.Pedido;
 import projeto.microservices.pedidos.service.PedidoService;
@@ -17,6 +19,7 @@ import projeto.microservices.pedidos.service.PedidoService;
 import java.util.List;
 import java.util.Objects;
 
+@Slf4j
 @RestController
 @RequestMapping("pedidos")
 @RequiredArgsConstructor
@@ -53,5 +56,13 @@ public class PedidoController {
     public ResponseEntity<Pedido> listarPedidosPorId(@PathVariable String id)
     {
         return ResponseEntity.ok(pedidoService.listarPedidoPorId(id));
+    }
+
+    @Operation(summary = "Atualizar status de pedidos por ID")
+    @PatchMapping("{id}/status")
+    public ResponseEntity<Pedido> atualizarPedidoPorId(@PathVariable String id, @RequestBody AtualizarStatusPedidoDTO dto)
+    {
+        log.info("O status do pedido {} foi alterado para {}", id, dto.statusPedido());
+        return ResponseEntity.ok(pedidoService.atualizarStatusDoPedido(id, dto.statusPedido()));
     }
 }

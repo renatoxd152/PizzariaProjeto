@@ -90,4 +90,16 @@ public class PedidoService {
                                 "Pedido não encontrado!"
                         ));
     }
+
+    public Pedido atualizarStatusDoPedido(String idPedido, StatusPedido statusPedido) {
+
+        Pedido pedido = pedidoRepository.findById(idPedido).orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Pedido não encontrado!"
+                        ));
+        pedido.setStatusPedido(statusPedido);
+
+        return pedidoRepository.save(pedido);
+    }
 }

@@ -127,6 +127,34 @@
     text-align: center;
 }
 
+/* Alterar status (somente admin) */
+.pd-admin {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 20px 16px;
+}
+.pd-admin label {
+    flex: none;
+    font-size: 13px;
+    color: #6b7785;
+}
+.pd-select {
+    flex: 1;
+    min-width: 0;
+    padding: 6px 10px;
+    border: 1px solid #dfe3e8;
+    border-radius: 8px;
+    background: #fff;
+    color: #3b4450;
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    transition: border-color .15s;
+}
+.pd-select:hover { border-color: #1e8a5b; }
+.pd-select:focus-visible { outline: 3px solid rgba(30, 138, 91, .35); outline-offset: 2px; }
+
 .pd-rodape {
     display: flex;
     align-items: baseline;

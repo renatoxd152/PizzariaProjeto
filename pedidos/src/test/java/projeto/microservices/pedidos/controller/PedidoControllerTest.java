@@ -17,10 +17,7 @@ import projeto.microservices.pedidos.client.enums.UsuarioRole;
 import projeto.microservices.pedidos.client.representation.ClienteRepresentation;
 import projeto.microservices.pedidos.client.representation.PizzaRepresentation;
 import projeto.microservices.pedidos.configs.SecurityConfig;
-import projeto.microservices.pedidos.controller.dto.IngredienteDTO;
-import projeto.microservices.pedidos.controller.dto.ItemPedidoDTO;
-import projeto.microservices.pedidos.controller.dto.PedidoDTO;
-import projeto.microservices.pedidos.controller.dto.PizzaDTO;
+import projeto.microservices.pedidos.controller.dto.*;
 import projeto.microservices.pedidos.model.IngredientePizza;
 import projeto.microservices.pedidos.model.ItemPedido;
 import projeto.microservices.pedidos.model.Pedido;
@@ -39,8 +36,7 @@ import java.util.UUID;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -202,6 +198,26 @@ public class PedidoControllerTest {
         }
 
     }
+
+    @Test
+    @DisplayName("Deve atualizar o status do pedido de um cliente quando o usuário logado for um admin")
+    public void deveAtualizarStatusDoPedidoDeUmCliente() throws Exception {
+
+        when(pedidoService.atualizarStatusDoPedido("idPedido", StatusPedido.PREPARANDO_ENVIO)).thenReturn(pedido);
+
+        mockMvc.perform(patch("/pedidos/{id}/status", "idPedido")
+                        .with(jwt()
+                                .jwt(j -> j.claim("cpf", pedidoDTO.clienteCPF()))
+                                .authorities(new SimpleGrantedAuthority("ROLE_ADMIN"))
+                        )
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(
+                                new AtualizarStatusPedidoDTO(StatusPedido.PREPARANDO_ENVIO)
+                        ))
+                )
+                .andExpect(status().isOk());
+    }
+
 
 
 }
