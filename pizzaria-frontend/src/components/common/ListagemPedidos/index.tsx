@@ -84,13 +84,17 @@ export const MenuListagemPedidos: React.FC<MenuListagemPedidosProps> = ({
             ? pedidosAtuais
             : pedidosAtuais.filter((p) => p.statusPedido === filtro);
 
-    const opcoes: { valor: Filtro; rotulo: string }[] = [
+    const todasOpcoes: { valor: Filtro; rotulo: string }[] = [
         { valor: "TODOS", rotulo: "Todos" },
         ...(Object.keys(status) as StatusPedido[]).map((s) => ({
             valor: s,
             rotulo: status[s].rotulo,
         })),
     ];
+
+    const opcoes = todasOpcoes.filter(
+        (o) => o.valor === "TODOS" || o.valor === filtro || (contagem[o.valor] ?? 0) > 0
+    );
 
     const token = localStorage.getItem("token");
     const tokenDecodificado = token ? decodificarToken(token) : null;
