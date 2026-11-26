@@ -7,7 +7,8 @@ export type StatusPedido =
     | "EM_PREPARO"
     | "AGUARDANDO_PAGAMENTO"
     | "SAIU_PARA_ENTREGA"
-    | "ENTREGUE";
+    | "ENTREGUE"
+    | "CANCELADO";
 
 
 export interface ClienteRepresentation {

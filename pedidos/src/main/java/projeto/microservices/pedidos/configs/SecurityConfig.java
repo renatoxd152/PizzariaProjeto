@@ -44,7 +44,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/pedidos").hasRole("CLIENTE")
                         .requestMatchers(HttpMethod.GET, "/pedidos/**").hasAnyRole("CLIENTE", "ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, "/pedidos/*/status").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/pedidos/*/status").hasAnyRole("CLIENTE", "ADMIN")
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",

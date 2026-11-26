@@ -176,6 +176,124 @@
     color: #6b7785;
 }
 
+/* Card clicável (cliente) */
+.pd-clicavel {
+    cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+}
+.pd-clicavel:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(16, 24, 40, .14);
+}
+.pd-clicavel:focus-visible { outline: 3px solid rgba(30, 138, 91, .35); outline-offset: 2px; }
+
+/* Modal de acompanhamento */
+.pd-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+}
+.pd-modal {
+    position: relative;
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    width: min(480px, 92vw);
+    max-height: 90vh;
+    overflow-y: auto;
+    color: #1f2933;
+}
+.pd-modal h2 { margin: 0; font-size: 20px; }
+.pd-modal .pd-itens { padding: 4px 0 16px; }
+.pd-fechar {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    border: 0;
+    background: none;
+    font-size: 24px;
+    color: #6b7785;
+    cursor: pointer;
+}
+.pd-modal-status { margin: 4px 0 0; color: #6b7785; font-size: 14px; }
+
+.pd-linha-tempo { list-style: none; padding: 0; margin: 16px 0; }
+.pd-etapa { position: relative; padding: 6px 0 6px 28px; color: #9aa4af; }
+.pd-etapa::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid #d5dae0;
+    background: #fff;
+}
+.pd-etapa.feito { color: #1e8a5b; }
+.pd-etapa.feito::before { background: #1e8a5b; border-color: #1e8a5b; }
+.pd-etapa.atual { color: #1f2933; font-weight: 700; }
+.pd-etapa.atual::before { border-color: #1e8a5b; background: #bbf7d0; }
+.pd-erro-pag {
+    color: #b91c1c;
+    background: #fee2e2;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.pd-cancelado {
+    color: #4b5563;
+    background: #e5e7eb;
+    padding: 12px;
+    border-radius: 8px;
+}
+.pd-cancelar {
+    display: block;
+    width: 100%;
+    margin-top: 16px;
+    padding: 10px 14px;
+    border: 1px solid #b91c1c;
+    border-radius: 8px;
+    background: #fff;
+    color: #b91c1c;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color .15s, color .15s;
+}
+.pd-cancelar:hover:not(:disabled) { background: #b91c1c; color: #fff; }
+.pd-cancelar:focus-visible { outline: 3px solid rgba(185, 28, 28, .35); outline-offset: 2px; }
+.pd-cancelar:disabled { opacity: .6; cursor: not-allowed; }
+
+.pd-confirmacao {
+    margin-top: 16px;
+    padding: 16px;
+    border: 1px solid #fecaca;
+    border-radius: 12px;
+    background: #fef2f2;
+}
+.pd-confirmacao-titulo { margin: 0; font-weight: 700; color: #7f1d1d; }
+.pd-confirmacao-texto { margin: 4px 0 14px; font-size: 14px; color: #6b7785; }
+.pd-confirmacao-acoes { display: flex; gap: 10px; }
+.pd-confirmacao-acoes button {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+.pd-voltar { border: 1px solid #dfe3e8; background: #fff; color: #3b4450; }
+.pd-voltar:hover:not(:disabled) { border-color: #1e8a5b; }
+.pd-confirmar { border: 1px solid #b91c1c; background: #b91c1c; color: #fff; }
+.pd-confirmar:hover:not(:disabled) { background: #991b1b; }
+.pd-confirmacao-acoes button:disabled { opacity: .6; cursor: not-allowed; }
+.pd-confirmacao .pd-erro-pag { margin: 0 0 12px; }
+
 @media (max-width: 480px) {
     .pd-grade { grid-template-columns: 1fr; }
     .pd-topo { flex-wrap: wrap; }

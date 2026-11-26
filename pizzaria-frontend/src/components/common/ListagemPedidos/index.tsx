@@ -6,8 +6,9 @@ import type {
     StatusPedido
 } from "../../../models/PedidoResponse.ts";
 import "./index.css";
-import {decodificarToken} from "../../../utils/jwt.ts";
-import {usePedidoService} from "../../../services/pedidos.service.ts";
+import { decodificarToken } from "../../../utils/jwt.ts";
+import { usePedidoService } from "../../../services/pedidos.service.ts";
+
 type Filtro = StatusPedido | "TODOS";
 
 interface MenuListagemPedidosProps {
@@ -27,7 +28,18 @@ const status: Record<StatusPedido, { rotulo: string; cor: string; fundo: string 
     AGUARDANDO_PAGAMENTO: { rotulo: "Aguardando pagamento", cor: "#a16207", fundo: "#fef9c3" },
     SAIU_PARA_ENTREGA: { rotulo: "Saiu para entrega", cor: "#0891b2", fundo: "#cffafe" },
     ENTREGUE: { rotulo: "Entregue", cor: "#15803d", fundo: "#dcfce7" },
+    CANCELADO: { rotulo: "Cancelado", cor: "#4b5563", fundo: "#e5e7eb" },
 };
+
+const ETAPAS: StatusPedido[] = [
+    "PENDENTE",
+    "AGUARDANDO_PAGAMENTO",
+    "FATURADO",
+    "EM_PREPARO",
+    "PREPARANDO_ENVIO",
+    "SAIU_PARA_ENTREGA",
+    "ENTREGUE",
+];
 
 const moeda = (valor: number) =>
     valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -45,6 +57,11 @@ export const MenuListagemPedidos: React.FC<MenuListagemPedidosProps> = ({
                                                                         }) => {
     const [filtro, setFiltro] = useState<Filtro>("TODOS");
     const [statusLocal, setStatusLocal] = useState<Record<string, StatusPedido>>({});
+    const [selecionado, setSelecionado] = useState<string | null>(null);
+    const [cancelando, setCancelando] = useState(false);
+    const [confirmando, setConfirmando] = useState(false);
+    const [erroCancelar, setErroCancelar] = useState<string | null>(null);
+
     const pedidosAtuais = useMemo(
         () =>
             pedidos.map((p) => ({
@@ -78,7 +95,10 @@ export const MenuListagemPedidos: React.FC<MenuListagemPedidosProps> = ({
     const token = localStorage.getItem("token");
     const tokenDecodificado = token ? decodificarToken(token) : null;
     const ehAdmin = tokenDecodificado?.role.includes("ROLE_ADMIN") ?? false;
+    const ehCliente = tokenDecodificado?.role.includes("ROLE_CLIENTE") ?? false;
     const pedidoService = usePedidoService();
+
+    const pedidoAberto = pedidosAtuais.find((p) => p.id === selecionado) ?? null;
 
     const alterarStatus = async (idPedido: string, novoStatus: StatusPedido) => {
         if (onAlterarStatus) {
@@ -93,6 +113,27 @@ export const MenuListagemPedidos: React.FC<MenuListagemPedidosProps> = ({
             console.error(e);
             alert("Não foi possível alterar o status.");
         }
+    };
+
+    const cancelarPedido = async (idPedido: string) => {
+        setCancelando(true);
+        setErroCancelar(null);
+        try {
+            await pedidoService.atualizarStatusDoPedido(idPedido, "CANCELADO");
+            setStatusLocal((atual) => ({ ...atual, [idPedido]: "CANCELADO" }));
+            setConfirmando(false);
+        } catch (e) {
+            console.error(e);
+            setErroCancelar("Não foi possível cancelar. O pedido pode já ter sido processado.");
+        } finally {
+            setCancelando(false);
+        }
+    };
+
+    const fecharModal = () => {
+        setSelecionado(null);
+        setConfirmando(false);
+        setErroCancelar(null);
     };
 
     return (
@@ -124,8 +165,21 @@ export const MenuListagemPedidos: React.FC<MenuListagemPedidosProps> = ({
                     return (
                         <article
                             key={pedido.id}
-                            className="pd-card"
+                            className={`pd-card ${ehCliente ? "pd-clicavel" : ""}`}
                             style={{ "--cor": s.cor, "--fundo": s.fundo } as React.CSSProperties}
+                            onClick={ehCliente ? () => setSelecionado(pedido.id) : undefined}
+                            role={ehCliente ? "button" : undefined}
+                            tabIndex={ehCliente ? 0 : undefined}
+                            onKeyDown={
+                                ehCliente
+                                    ? (e) => {
+                                        if (e.key === "Enter" || e.key === " ") {
+                                            e.preventDefault();
+                                            setSelecionado(pedido.id);
+                                        }
+                                    }
+                                    : undefined
+                            }
                         >
                             <header className="pd-topo">
                                 <div className="pd-cliente">
@@ -171,6 +225,112 @@ export const MenuListagemPedidos: React.FC<MenuListagemPedidosProps> = ({
                     );
                 })}
             </section>
+
+            {pedidoAberto && (
+                <div className="pd-overlay" onClick={fecharModal}>
+                    <div
+                        className="pd-modal"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label={`Acompanhamento do pedido ${pedidoAberto.id.slice(-6)}`}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <button
+                            type="button"
+                            className="pd-fechar"
+                            aria-label="Fechar"
+                            onClick={fecharModal}
+                        >
+                            ×
+                        </button>
+
+                        <h2>Pedido #{pedidoAberto.id.slice(-6)}</h2>
+                        <p className="pd-modal-status">
+                            {(status[pedidoAberto.statusPedido] ?? status.PENDENTE).rotulo}
+                        </p>
+
+                        {pedidoAberto.statusPedido === "ERRO_PAGAMENTO" ? (
+                            <p className="pd-erro-pag">
+                                Houve um problema com o pagamento deste pedido.
+                            </p>
+                        ) : pedidoAberto.statusPedido === "CANCELADO" ? (
+                            <p className="pd-cancelado">Este pedido foi cancelado.</p>
+                        ) : (
+                            <ol className="pd-linha-tempo">
+                                {ETAPAS.map((etapa, i) => {
+                                    const atual = Math.max(
+                                        0,
+                                        ETAPAS.indexOf(pedidoAberto.statusPedido)
+                                    );
+                                    const classe =
+                                        i < atual ? "feito" : i === atual ? "atual" : "pendente";
+                                    return (
+                                        <li key={etapa} className={`pd-etapa ${classe}`}>
+                                            {status[etapa].rotulo}
+                                        </li>
+                                    );
+                                })}
+                            </ol>
+                        )}
+
+                        <ul className="pd-itens">
+                            {pedidoAberto.itens.map((item, i) => (
+                                <li key={i} className="pd-item">
+                                    <span className="pd-qtd">{item.quantidade}×</span>
+                                    <span>{descricaoItem(item)}</span>
+                                </li>
+                            ))}
+                        </ul>
+
+                        <strong className="pd-total">{moeda(pedidoAberto.total)}</strong>
+
+                        {ehCliente && pedidoAberto.statusPedido === "PENDENTE" && (
+                            confirmando ? (
+                                <div
+                                    className="pd-confirmacao"
+                                    role="alertdialog"
+                                    aria-label="Confirmar cancelamento"
+                                >
+                                    <p className="pd-confirmacao-titulo">Cancelar este pedido?</p>
+                                    <p className="pd-confirmacao-texto">
+                                        Essa ação não pode ser desfeita.
+                                    </p>
+                                    {erroCancelar && <p className="pd-erro-pag">{erroCancelar}</p>}
+                                    <div className="pd-confirmacao-acoes">
+                                        <button
+                                            type="button"
+                                            className="pd-voltar"
+                                            disabled={cancelando}
+                                            onClick={() => {
+                                                setConfirmando(false);
+                                                setErroCancelar(null);
+                                            }}
+                                        >
+                                            Voltar
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="pd-confirmar"
+                                            disabled={cancelando}
+                                            onClick={() => cancelarPedido(pedidoAberto.id)}
+                                        >
+                                            {cancelando ? "Cancelando..." : "Sim, cancelar pedido"}
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <button
+                                    type="button"
+                                    className="pd-cancelar"
+                                    onClick={() => setConfirmando(true)}
+                                >
+                                    Cancelar pedido
+                                </button>
+                            )
+                        )}
+                    </div>
+                </div>
+            )}
         </>
     );
 };
